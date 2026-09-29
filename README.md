@@ -8,6 +8,7 @@ Pequenos prestadores de serviço frequentemente utilizam WhatsApp, agendas físi
 
 ## Problema
 
+- Agendamentos dispersos em conversas de WhatsApp e agendas físicas.
 - Conflitos de horário entre atendimentos.
 - Esquecimentos de agendamentos.
 - Dificuldade de organização da agenda dos profissionais.
@@ -16,17 +17,20 @@ Pequenos prestadores de serviço frequentemente utilizam WhatsApp, agendas físi
 
 ## Objetivo Geral
 
-Desenvolver uma aplicação para centralizar e organizar o gerenciamento de clientes, profissionais, serviços e agendamentos.
+Desenvolver uma aplicação orientada a objetos para centralizar e organizar o gerenciamento de clientes, profissionais, serviços, disponibilidade e agendamentos.
 
 ## Objetivos Específicos
 
 - Cadastrar clientes.
 - Cadastrar profissionais.
 - Cadastrar serviços.
-- Controlar horários disponíveis.
-- Realizar agendamentos.
+- Associar serviços aos profissionais.
+- Registrar disponibilidade dos profissionais.
+- Consultar horários disponíveis.
+- Criar e consultar agendamentos.
 - Impedir conflitos de horário.
-- Permitir cancelamento de agendamentos.
+- Permitir alteração e cancelamento de agendamentos.
+- Acompanhar o status dos agendamentos.
 - Armazenar histórico de atendimentos.
 
 ## Público-Alvo
@@ -36,6 +40,22 @@ Desenvolver uma aplicação para centralizar e organizar o gerenciamento de clie
 - Manicures.
 - Clínicas de estética.
 - Profissionais autônomos.
+
+## Documentação
+
+| Documento | Conteúdo |
+|---|---|
+| [Documentação geral](docs/documentacao.md) | Contexto, justificativa, objetivos, usuários e aplicação de POO |
+| [Arquitetura](docs/arquitetura.md) | Responsabilidades das camadas e modelo de domínio |
+| [Entidades](docs/entidades.md) | Usuario abstrato, subclasses e entidades do agendamento |
+| [Relações](docs/relacoes.md) | Herança, associações e cardinalidades |
+| [Dados](docs/dados.md) | Atributos, tipos Java sugeridos e status |
+| [Requisitos](docs/requisitos.md) | Requisitos funcionais, não funcionais e regras de negócio |
+| [Imersão na comunidade](docs/imersao.md) | Modelo para registro da coleta futura |
+| [Modelo de dados](database/modelo-dados.md) | Tabelas conceituais e chaves previstas |
+| [Diagramas](diagramas/README.md) | Diagramas de classes, arquitetura e entidade-relacionamento |
+
+O modelo inicial adota **Usuario como classe abstrata**, herdada por Cliente, Profissional e Administrador. Disponibilidade representa os períodos semanais dos profissionais, e a associação N:N entre Profissional e Servico indica quais serviços cada profissional oferece. Agendamento reúne cliente, profissional, serviço, data, horário e status. Essa proposta será validada durante a imersão e poderá evoluir no semestre.
 
 ## Estrutura do Projeto
 
@@ -47,9 +67,14 @@ sistema-agendamento-/
 │   ├── arquitetura.md
 │   ├── entidades.md
 │   ├── relacoes.md
-│   └── dados.md
+│   ├── dados.md
+│   ├── requisitos.md
+│   └── imersao.md
 ├── diagramas/
-│   └── README.md
+│   ├── README.md
+│   ├── diagrama-classes.md
+│   ├── diagrama-arquitetura.md
+│   └── diagrama-entidade-relacionamento.md
 ├── src/
 │   └── main/
 │       └── java/
@@ -58,8 +83,8 @@ sistema-agendamento-/
     └── modelo-dados.md
 ```
 
-- `docs/`: [documentação geral](docs/documentacao.md), [arquitetura](docs/arquitetura.md), [entidades](docs/entidades.md), [relações](docs/relacoes.md) e [dados](docs/dados.md).
-- `diagramas/`: espaço para os futuros diagramas, descritos no [guia da pasta](diagramas/README.md).
+- `docs/`: documentação geral, modelagem, requisitos e registro futuro da imersão, conforme o índice acima.
+- `diagramas/`: diagramas iniciais em Mermaid, descritos no [guia da pasta](diagramas/README.md).
 - `src/`: espaço reservado para o código-fonte Java; a estrutura de pacotes será definida após a validação da arquitetura.
 - `database/`: [modelo de dados previsto](database/modelo-dados.md), sem banco real ou SQL nesta etapa.
 
@@ -75,6 +100,7 @@ Conteúdo:
 - Entidades.
 - Relações entre entidades.
 - Estrutura de dados.
+- Diagramas iniciais.
 
 Esta etapa prepara a base do projeto. As funcionalidades serão implementadas posteriormente, após o levantamento e a validação dos requisitos.
 
@@ -85,9 +111,16 @@ Esta etapa prepara a base do projeto. As funcionalidades serão implementadas po
 - Git.
 - GitHub.
 
-Interface: **A definir durante o desenvolvimento.**
+Interface: **A definir.**
 
-Banco de dados: **A definir durante o desenvolvimento.**
+Banco de dados: **A definir.**
+
+## Equipe
+
+| Integrante | GitHub | Papel |
+|---|---|---|
+| Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | A definir |
+| A definir | A definir | A definir |
 
 ## Status
 

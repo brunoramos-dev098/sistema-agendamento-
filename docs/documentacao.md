@@ -14,15 +14,17 @@ Centralizar clientes, profissionais, serviços e agendamentos pode melhorar a or
 
 ## Objetivo geral
 
-Desenvolver uma aplicação orientada a objetos para gerenciamento de serviços e agendamentos.
+Desenvolver uma aplicação orientada a objetos para centralizar e organizar clientes, profissionais, serviços, disponibilidade e agendamentos.
 
 ## Objetivos específicos
 
 - Cadastrar clientes, profissionais e serviços.
-- Controlar e consultar horários disponíveis.
+- Associar serviços aos profissionais.
+- Registrar disponibilidade dos profissionais e consultar horários disponíveis.
 - Realizar e acompanhar agendamentos.
 - Impedir conflitos de horário.
-- Permitir o cancelamento de agendamentos.
+- Permitir a alteração e o cancelamento de agendamentos.
+- Acompanhar o status dos agendamentos.
 - Armazenar histórico de atendimentos.
 
 ## Usuários do sistema
@@ -41,6 +43,18 @@ Pessoa responsável pela gestão do estabelecimento e das informações do siste
 
 ## Escopo da primeira entrega
 
-A entrega de **30/09/2026** contempla documentação, organização do repositório, arquitetura inicial, entidades, relações e estrutura de dados. Não inclui a aplicação completa, funcionalidades implementadas ou um banco de dados real.
+A entrega de **30/09/2026** contempla documentação, organização do repositório, arquitetura inicial, entidades, relações, estrutura de dados, requisitos e diagramas iniciais. Não inclui a aplicação completa, funcionalidades implementadas ou um banco de dados real.
 
 Esta documentação poderá evoluir conforme a imersão na comunidade e o levantamento de requisitos forem realizados. Os perfis acima representam papéis iniciais; permissões e formas de acesso serão detalhadas posteriormente com a equipe.
+
+## Aplicação de POO
+
+A proposta inicial adota **Usuario como classe abstrata**, concentrando os atributos comuns herdados por Cliente, Profissional e Administrador. Isso explicita abstração e herança no modelo. O encapsulamento orientará a futura implementação dos dados e comportamentos dos objetos, com responsabilidades separadas entre as camadas.
+
+As associações representam os vínculos do domínio: cada Agendamento referencia Cliente, Profissional e Servico; Profissional possui períodos de Disponibilidade e se associa a serviços independentemente de agendamentos. Não são antecipados métodos ou mecanismos de polimorfismo sem uma necessidade validada.
+
+## Organização da documentação e evolução
+
+Os [requisitos e regras de negócio](requisitos.md) orientam as [entidades](entidades.md), [relações](relacoes.md) e [dados](dados.md). A [arquitetura](arquitetura.md) organiza as responsabilidades, enquanto os [diagramas](../diagramas/README.md) e o [modelo de dados](../database/modelo-dados.md) oferecem visões complementares da mesma proposta.
+
+A [imersão na comunidade](imersao.md) está preparada para preenchimento posterior. Seus resultados deverão validar ou ajustar a proposta; depois disso, a equipe poderá definir pacotes Java, interface e persistência e iniciar a implementação durante o semestre.

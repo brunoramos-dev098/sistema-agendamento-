@@ -122,7 +122,7 @@ Banco de dados: MySQL
 | Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | Team Lead |
 | Luciano Henrique | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end |
 | Thyago Baima | [Thyago098](https://github.com/Thyago098)   | DevOps |
-| A definir | A definir | A definir |
+| Carlos Eduardo Sá Costa | A definir | Front-end |
 ## Status
 
 Em desenvolvimento.

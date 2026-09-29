@@ -119,7 +119,7 @@ Banco de dados: **A definir.**
 
 | Integrante | GitHub | Papel |
 |---|---|---|
-| Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | A definir |
+| Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | Team Lead |
 | A definir | A definir | A definir |
 
 ## Status

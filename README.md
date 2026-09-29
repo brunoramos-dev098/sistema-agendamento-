@@ -121,7 +121,7 @@ Banco de dados: **A definir.**
 |---|---|---|
 | Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | Team Lead |
 | Luciano Henrique | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end |
-| A definir | A definir | A definir |
+| Thyago Baima | [Thyago098](https://github.com/Thyago098)   | DevOps |
 | A definir | A definir | A definir |
 ## Status
 

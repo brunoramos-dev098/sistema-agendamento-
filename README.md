@@ -111,9 +111,9 @@ Esta etapa prepara a base do projeto. As funcionalidades serão implementadas po
 - Git.
 - GitHub.
 
-Interface: **A definir.**
+Interface: JavaFX + FXML + Scene Builder + CSS
 
-Banco de dados: **A definir.**
+Banco de dados: MySQL
 
 ## Equipe
 

@@ -17,9 +17,10 @@ Responsável por:
 - Verificar disponibilidade.
 - Validar agendamentos.
 - Evitar conflitos de horário.
-- Controlar cancelamentos.
+- Verificar se o profissional está associado ao serviço solicitado.
+- Controlar alterações e cancelamentos.
 
-As regras serão detalhadas após o levantamento de requisitos, considerando a duração dos serviços e a agenda dos profissionais.
+As regras iniciais estão em [requisitos](requisitos.md), especialmente RN01–RN07. A validação considera o intervalo completo do serviço, os períodos de Disponibilidade e os agendamentos que ocupam a agenda. As regras serão refinadas após a imersão.
 
 ## Camada de Persistência
 
@@ -27,12 +28,21 @@ Responsável pela comunicação com o banco de dados por meio de repositories. O
 
 ## Camada de Modelo
 
-Responsável pelas entidades principais do domínio, como Cliente, Profissional, Servico e Agendamento. Essas entidades representam os dados e comportamentos do domínio e são utilizadas pelas demais camadas conforme necessário.
+Responsável pelos dados e comportamentos do domínio. É formada por:
+
+- **Usuario**: classe abstrata com os atributos comuns.
+- **Cliente**, **Profissional** e **Administrador**: subclasses de Usuario.
+- **Servico**: serviço oferecido pelo estabelecimento.
+- **Disponibilidade**: período semanal disponível de um profissional.
+- **Agendamento**: atendimento associado a um cliente, profissional e serviço.
+- **StatusAgendamento**: enum previsto com `AGENDADO`, `CONFIRMADO`, `CANCELADO` e `CONCLUIDO`.
+
+O modelo é utilizado pelas camadas da aplicação conforme suas responsabilidades. As entidades estão documentadas em [entidades](entidades.md); StatusAgendamento é um tipo enumerado do domínio, não uma entidade com identidade própria.
 
 ## Fluxo inicial
 
 ```text
-Interface
+Apresentação
    ↓
 Controller
    ↓
@@ -46,3 +56,5 @@ Banco de Dados
 O fluxo representa o encaminhamento de uma solicitação até a persistência; os resultados retornam às camadas anteriores. O modelo apoia essas interações e não representa uma etapa adicional depois do banco de dados.
 
 Esta arquitetura poderá ser ajustada posteriormente. Nenhum framework foi escolhido. A estrutura de pacotes Java será definida quando a arquitetura estiver validada.
+
+A representação visual está no [diagrama de arquitetura](../diagramas/diagrama-arquitetura.md). Nesta etapa, as camadas são uma proposta de organização; não há controllers, services ou repositories implementados.

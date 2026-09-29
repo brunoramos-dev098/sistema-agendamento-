@@ -121,7 +121,8 @@ Banco de dados: **A definir.**
 |---|---|---|
 | Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | Team Lead |
 | A definir | A definir | A definir |
-
+| A definir | A definir | A definir |
+| A definir | A definir | A definir |
 ## Status
 
 Em desenvolvimento.

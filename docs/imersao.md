@@ -1,6 +1,6 @@
 # Imersão na Comunidade
 
-Modelo para preenchimento posterior. Não há coleta de dados documentada neste repositório até esta revisão; os campos abaixo não representam entrevistas ou observações já realizadas.
+Registro da imersão na comunidade. Os campos serão preenchidos após a coleta de dados, ainda não registrada no projeto.
 
 ## Cenário de prática
 

@@ -43,10 +43,10 @@ Os estados previstos são `AGENDADO`, `CONFIRMADO`, `CANCELADO` e `CONCLUIDO`. C
 | RNF01 | O código deverá utilizar princípios de Programação Orientada a Objetos. |
 | RNF02 | O sistema deverá apresentar separação clara de responsabilidades entre as camadas. |
 | RNF03 | A aplicação deverá validar informações obrigatórias antes de registrar dados. |
-| RNF04 | A interface futura deverá possuir navegação simples e compreensível. |
-| RNF05 | Os dados deverão futuramente ser persistidos em banco de dados. |
+| RNF04 | A interface JavaFX, com layouts FXML, edição no Scene Builder e estilos CSS, deverá possuir navegação simples e compreensível. |
+| RNF05 | Os dados deverão ser persistidos em MySQL. |
 
-Interface, banco de dados e frameworks permanecem a definir. Os requisitos acima orientam o desenvolvimento futuro, sem prometer recursos já implementados.
+JavaFX, FXML, Scene Builder e CSS estão definidos para a interface, e MySQL para o banco de dados. O mecanismo de acesso ao MySQL será detalhado na implementação. Não há framework adicional de Back-end ou persistência definido.
 
 ## Relação com a modelagem
 
@@ -58,4 +58,4 @@ Interface, banco de dados e frameworks permanecem a definir. Os requisitos acima
 | RF07–RF09 | Agendamento e suas referências obrigatórias |
 | RF10–RF11 | Agendamento e StatusAgendamento, preservando os registros |
 
-Consulte [entidades](entidades.md), [relações](relacoes.md) e [arquitetura](arquitetura.md). A primeira entrega contempla a documentação e modelagem destes requisitos; sua implementação é uma etapa posterior.
+As [entidades](entidades.md), [relações](relacoes.md) e a [arquitetura](arquitetura.md) descrevem a organização prevista para atender a esses requisitos.

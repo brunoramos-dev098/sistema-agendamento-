@@ -1,6 +1,6 @@
 # Diagrama Entidade-Relacionamento
 
-Visão conceitual da persistência prevista, sem SQL ou escolha definitiva de banco de dados. Os tipos abaixo são descritivos.
+Modelo conceitual dos dados que serão armazenados em MySQL. Os tipos abaixo são descritivos; o esquema físico e os scripts SQL serão elaborados na implementação.
 
 ```mermaid
 erDiagram

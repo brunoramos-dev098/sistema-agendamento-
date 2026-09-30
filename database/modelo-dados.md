@@ -1,6 +1,6 @@
 # Modelo de dados previsto
 
-Esta é uma visão inicial da estrutura de persistência, sujeita à validação dos requisitos. Nenhum banco de dados foi escolhido ou criado, e esta etapa não inclui SQL.
+O sistema utilizará MySQL para armazenar os dados. Este documento descreve o modelo conceitual de persistência; o esquema físico e os scripts SQL serão elaborados na implementação.
 
 ## Possíveis tabelas futuras
 
@@ -80,4 +80,4 @@ Essa tabela resolve conceitualmente a relação **N:N** e permite registrar os s
 
 Os atributos e tipos Java sugeridos estão em [dados](../docs/dados.md), e as cardinalidades em [relações](../docs/relacoes.md). O [diagrama entidade-relacionamento](../diagramas/diagrama-entidade-relacionamento.md) representa as tabelas conceituais e chaves descritas aqui.
 
-Esta proposta não determina o banco, framework ou mecanismo de acesso aos dados. Os tipos usados no diagrama são descritivos, sem constituir SQL ou um esquema físico definitivo.
+Os tipos usados no diagrama são descritivos. Sua correspondência com os tipos SQL do MySQL e o mecanismo de acesso aos dados serão definidos na implementação.

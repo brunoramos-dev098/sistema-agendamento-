@@ -6,7 +6,7 @@ Este documento apresenta a proposta inicial da interface do Sistema de Gerenciam
 
 A interface corresponde à Camada de Apresentação definida na arquitetura do projeto e será responsável pela interação entre o usuário e as funcionalidades do sistema.
 
-Este documento descreve o planejamento, sem telas implementadas. O [README](../README.md) registra JavaFX, FXML, Scene Builder e CSS na seção de tecnologias, enquanto a [arquitetura](arquitetura.md) ainda mantém a interface a definir. Essa divergência documental permanece pendente de alinhamento pela equipe; o fluxo abaixo independe da tecnologia e não estabelece uma nova escolha.
+A interface desktop será desenvolvida em JavaFX. Os layouts serão descritos em FXML e editados no Scene Builder; o CSS definirá a aparência dos componentes. As telas descritas neste documento ainda estão em planejamento.
 
 ## 2. Objetivo da Interface
 
@@ -173,4 +173,4 @@ Exemplos:
 
 ## 7. Evolução Futura
 
-As telas e a navegação poderão ser refinadas após a [imersão na comunidade](imersao.md) e a validação dos requisitos RF01–RF11. As permissões e condições de alteração de status permanecem sujeitas ao detalhamento já previsto nos requisitos. Este planejamento preserva o escopo e a separação de responsabilidades da [arquitetura](arquitetura.md); nenhuma tela é implementada nesta etapa.
+A implementação das telas em JavaFX seguirá os fluxos descritos neste documento. Os layouts FXML, editados no Scene Builder, e os estilos CSS serão ajustados com base na [imersão na comunidade](imersao.md). As permissões e condições de alteração de status serão detalhadas conforme os [requisitos](requisitos.md).

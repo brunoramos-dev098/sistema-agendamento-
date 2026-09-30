@@ -62,13 +62,13 @@ Verificação de conflitos de horário
                 ↓
 Criação do Agendamento
                 ↓
-Repository encaminha a persistência ao Banco de Dados
+Repository encaminha a persistência ao MySQL
                 ↓
 Resultado retorna ao Service
                 ↓
 Resultado retorna ao Controller
                 ↓
-Resultado é enviado para a Camada de Apresentação
+Resultado é enviado para a interface JavaFX
 ```
 
 Durante as verificações, o Service solicitará ao Repository os dados necessários sobre o profissional, seus serviços, sua disponibilidade e os agendamentos existentes. Essas consultas também seguem a separação de camadas; a interface não acessa diretamente a persistência.
@@ -150,7 +150,7 @@ As condições exatas para mudança entre os estados poderão ser refinadas post
 ## 6. Responsabilidades das Camadas
 
 ```text
-Camada de Apresentação
+Camada de Apresentação (JavaFX, FXML, Scene Builder e CSS)
         ↓
 Controller
         ↓
@@ -158,12 +158,12 @@ Service
         ↓
 Repository
         ↓
-Banco de Dados
+MySQL
 ```
 
 ### Camada de Apresentação
 
-Recebe as entradas do usuário, encaminha solicitações ao Controller e apresenta os resultados retornados. Sua navegação é descrita no [fluxo da interface](fluxo-interface.md). As regras de negócio pertencem ao Service.
+A interface JavaFX, com layouts FXML, edição no Scene Builder e estilos CSS, recebe as entradas do usuário, encaminha solicitações ao Controller e apresenta os resultados retornados. Sua navegação é descrita no [fluxo da interface](fluxo-interface.md). As regras de negócio pertencem ao Service.
 
 ### Controller
 
@@ -198,9 +198,9 @@ Responsável futuramente por:
 - consultar os dados persistidos;
 - persistir novos registros;
 - atualizar informações existentes;
-- realizar a comunicação com o banco de dados.
+- realizar a comunicação com o MySQL.
 
-O [README](../README.md) registra MySQL, enquanto a [arquitetura](arquitetura.md), os [requisitos](requisitos.md) e o [modelo de dados](../database/modelo-dados.md) ainda mantêm a escolha do banco em aberto. Essa divergência documental permanece pendente de alinhamento pela equipe. Este fluxo descreve apenas as responsabilidades da persistência, sem decidir um banco ou mecanismo de acesso aos dados.
+O banco de dados será MySQL. O mecanismo de acesso e a estratégia de persistência da herança serão detalhados na implementação, a partir do [modelo de dados](../database/modelo-dados.md).
 
 ## 7. Modelo de Domínio
 
@@ -227,4 +227,4 @@ O modelo de domínio é utilizado pelas camadas conforme suas responsabilidades;
 
 Os componentes poderão ser detalhados durante a implementação, mantendo as responsabilidades e os requisitos RF01–RF11 já definidos. Os cadastros (RF01–RF03), as associações profissional/serviço (RF04) e os períodos de disponibilidade (RF05) fornecerão os dados necessários aos fluxos de agendamento.
 
-A [imersão na comunidade](imersao.md) orientará o refinamento das regras e das condições de mudança de status. Esta revisão não define frameworks, estratégia de persistência da herança ou novas funcionalidades, nem altera as decisões do modelo de domínio.
+A [imersão na comunidade](imersao.md) orientará o refinamento das regras e das condições de mudança de status. A implementação incluirá a integração dos repositories com MySQL e o tratamento das solicitações da interface JavaFX.

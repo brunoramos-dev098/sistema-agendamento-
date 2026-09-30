@@ -40,7 +40,7 @@ Profissional 0..N -------- 0..N Servico
 
 Esta é uma relação **N:N**: um profissional pode realizar vários serviços e o mesmo serviço pode ser realizado por vários profissionais. O cadastro pode existir antes da associação, por isso o mínimo é zero em ambos os lados.
 
-A relação registra quais serviços cada profissional está apto a realizar antes de existir um agendamento. Um agendamento só pode utilizar um par profissional/serviço já associado (RN03). No modelo de banco futuro, a relação será representada conceitualmente pela tabela associativa `profissionais_servicos`.
+A relação registra quais serviços cada profissional está apto a realizar antes de existir um agendamento. Um agendamento só pode utilizar um par profissional/serviço já associado (RN03). No MySQL, a relação será representada pela tabela associativa `profissionais_servicos`.
 
 ## Herança definida para a primeira entrega
 

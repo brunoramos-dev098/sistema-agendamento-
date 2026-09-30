@@ -1,6 +1,6 @@
 # Estrutura inicial dos dados
 
-Os tipos abaixo são sugestões iniciais para Java e poderão ser alterados após a validação dos requisitos. Não representam a definição de um banco de dados ou de tipos SQL.
+Os tipos abaixo descrevem os dados do modelo Java. O armazenamento será feito em MySQL; a correspondência entre os tipos Java e os tipos SQL será detalhada no esquema físico do banco.
 
 ## Usuario
 

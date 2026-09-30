@@ -51,10 +51,16 @@ Esta documentação poderá evoluir conforme a imersão na comunidade e o levant
 
 A proposta inicial adota **Usuario como classe abstrata**, concentrando os atributos comuns herdados por Cliente, Profissional e Administrador. Isso explicita abstração e herança no modelo. O encapsulamento orientará a futura implementação dos dados e comportamentos dos objetos, com responsabilidades separadas entre as camadas.
 
-As associações representam os vínculos do domínio: cada Agendamento referencia Cliente, Profissional e Servico; Profissional possui períodos de Disponibilidade e se associa a serviços independentemente de agendamentos. Não são antecipados métodos ou mecanismos de polimorfismo sem uma necessidade validada.
+As associações representam os vínculos do domínio: cada Agendamento referencia Cliente, Profissional e Servico; Profissional possui períodos de Disponibilidade e se associa a serviços independentemente de agendamentos.
+
+## Tecnologias do sistema
+
+A aplicação será desenvolvida em Java. A interface desktop utilizará JavaFX, com layouts em FXML, edição visual no Scene Builder e estilos em CSS. Os dados serão armazenados em MySQL, com acesso pela camada de persistência.
+
+As tecnologias estão definidas. A implementação das telas, das regras de negócio e da integração com o banco faz parte das próximas etapas do projeto.
 
 ## Organização da documentação e evolução
 
 Os [requisitos e regras de negócio](requisitos.md) orientam as [entidades](entidades.md), [relações](relacoes.md) e [dados](dados.md). A [arquitetura](arquitetura.md) organiza as responsabilidades, enquanto os [diagramas](../diagramas/README.md) e o [modelo de dados](../database/modelo-dados.md) oferecem visões complementares da mesma proposta.
 
-A [imersão na comunidade](imersao.md) está preparada para preenchimento posterior. Seus resultados deverão validar ou ajustar a proposta; depois disso, a equipe poderá definir pacotes Java, interface e persistência e iniciar a implementação durante o semestre.
+A [imersão na comunidade](imersao.md) servirá para validar os fluxos e as regras com os usuários. A equipe organizará os pacotes Java e implementará as telas em JavaFX, as regras de negócio e a persistência em MySQL durante o semestre.

@@ -4,7 +4,7 @@ A proposta inicial é uma arquitetura em camadas, simples e adequada a um projet
 
 ## Camada de Apresentação
 
-Responsável pela interação com o usuário, apresentando informações e recebendo entradas. A tecnologia de interface será definida durante o desenvolvimento.
+Responsável pela interação com o usuário, apresentando informações e recebendo entradas. A aplicação desktop utilizará JavaFX, com layouts em FXML, edição visual no Scene Builder e estilos em CSS.
 
 ## Camada de Controle
 
@@ -24,7 +24,7 @@ As regras iniciais estão em [requisitos](requisitos.md), especialmente RN01–R
 
 ## Camada de Persistência
 
-Responsável pela comunicação com o banco de dados por meio de repositories. O banco de dados e a forma de persistência serão definidos posteriormente; nesta entrega há apenas a documentação do modelo previsto.
+Responsável pela comunicação com o MySQL por meio de repositories. O banco está definido; o mecanismo de acesso aos dados e o mapeamento das classes para as tabelas serão detalhados na implementação.
 
 ## Camada de Modelo
 
@@ -42,7 +42,7 @@ O modelo é utilizado pelas camadas da aplicação conforme suas responsabilidad
 ## Fluxo inicial
 
 ```text
-Apresentação
+Apresentação (JavaFX, FXML, Scene Builder e CSS)
    ↓
 Controller
    ↓
@@ -50,11 +50,11 @@ Service
    ↓
 Repository
    ↓
-Banco de Dados
+MySQL
 ```
 
 O fluxo representa o encaminhamento de uma solicitação até a persistência; os resultados retornam às camadas anteriores. O modelo apoia essas interações e não representa uma etapa adicional depois do banco de dados.
 
-Esta arquitetura poderá ser ajustada posteriormente. Nenhum framework foi escolhido. A estrutura de pacotes Java será definida quando a arquitetura estiver validada.
+JavaFX compõe a camada de apresentação. Nenhum framework adicional para o Back-end ou para persistência foi definido. A estrutura de pacotes Java será detalhada na implementação.
 
-A representação visual está no [diagrama de arquitetura](../diagramas/diagrama-arquitetura.md). Nesta etapa, as camadas são uma proposta de organização; não há controllers, services ou repositories implementados.
+A organização das camadas está representada no [diagrama de arquitetura](../diagramas/diagrama-arquitetura.md).

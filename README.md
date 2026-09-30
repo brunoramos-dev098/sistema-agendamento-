@@ -115,9 +115,15 @@ Esta etapa prepara a base do projeto. As funcionalidades serão implementadas po
 - Git.
 - GitHub.
 
-Interface: JavaFX + FXML + Scene Builder + CSS
+| Área | Tecnologia | Uso no projeto |
+|---|---|---|
+| Interface | JavaFX | Componentes e interação nas telas da aplicação desktop |
+| Estrutura das telas | FXML | Descrição dos layouts |
+| Edição visual | Scene Builder | Montagem e edição dos layouts FXML |
+| Estilos | CSS | Aparência dos componentes JavaFX |
+| Banco de dados | MySQL | Armazenamento dos dados do sistema |
 
-Banco de dados: MySQL
+Essas tecnologias estão definidas para o desenvolvimento. A etapa atual contempla a documentação e a modelagem; as telas e a integração com MySQL ainda serão implementadas.
 
 ## Equipe
 

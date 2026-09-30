@@ -2,11 +2,11 @@
 
 ```mermaid
 flowchart TD
-    A[Camada de Apresentação]
+    A["Apresentação: JavaFX, FXML, Scene Builder e CSS"]
     B[Controller]
     C[Service / Regras de Negócio]
     D[Repository / Persistência]
-    E[(Banco de Dados)]
+    E[(MySQL)]
     M[Modelo de Domínio]
 
     A --> B
@@ -23,4 +23,4 @@ As setas contínuas mostram o encaminhamento de uma solicitação: a apresentaç
 
 As setas pontilhadas indicam uso do modelo de domínio conforme a responsabilidade de cada camada. O modelo reúne Usuario (classe abstrata), Cliente, Profissional, Administrador, Servico, Disponibilidade, Agendamento e o enum StatusAgendamento. Ele não é uma etapa linear depois do banco.
 
-Este diagrama representa a arquitetura prevista. Interface, banco de dados e frameworks permanecem a definir. Consulte [arquitetura](../docs/arquitetura.md) e [diagrama de classes](diagrama-classes.md).
+A apresentação utilizará JavaFX, layouts FXML editados no Scene Builder e estilos CSS. Os repositories acessarão o MySQL. As responsabilidades estão detalhadas em [arquitetura](../docs/arquitetura.md), e o domínio está representado no [diagrama de classes](diagrama-classes.md).

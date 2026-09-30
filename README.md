@@ -47,6 +47,8 @@ Desenvolver uma aplicação orientada a objetos para centralizar e organizar o g
 |---|---|
 | [Documentação geral](docs/documentacao.md) | Contexto, justificativa, objetivos, usuários e aplicação de POO |
 | [Arquitetura](docs/arquitetura.md) | Responsabilidades das camadas e modelo de domínio |
+| [Fluxo da interface](docs/fluxo-interface.md) | Telas previstas, navegação e encaminhamento das solicitações ao Controller |
+| [Fluxo do Back-end](docs/fluxo-backend.md) | Componentes conceituais, processamento de agendamentos e validações RN01–RN07 |
 | [Entidades](docs/entidades.md) | Usuario abstrato, subclasses e entidades do agendamento |
 | [Relações](docs/relacoes.md) | Herança, associações e cardinalidades |
 | [Dados](docs/dados.md) | Atributos, tipos Java sugeridos e status |
@@ -65,6 +67,8 @@ sistema-agendamento-/
 ├── docs/
 │   ├── documentacao.md
 │   ├── arquitetura.md
+│   ├── fluxo-interface.md
+│   ├── fluxo-backend.md
 │   ├── entidades.md
 │   ├── relacoes.md
 │   ├── dados.md
@@ -83,7 +87,7 @@ sistema-agendamento-/
     └── modelo-dados.md
 ```
 
-- `docs/`: documentação geral, modelagem, requisitos e registro futuro da imersão, conforme o índice acima.
+- `docs/`: documentação geral, modelagem, fluxos de interface e Back-end, requisitos e registro futuro da imersão, conforme o índice acima.
 - `diagramas/`: diagramas iniciais em Mermaid, descritos no [guia da pasta](diagramas/README.md).
 - `src/`: espaço reservado para o código-fonte Java; a estrutura de pacotes será definida após a validação da arquitetura.
 - `database/`: [modelo de dados previsto](database/modelo-dados.md), sem banco real ou SQL nesta etapa.
@@ -121,8 +125,9 @@ Banco de dados: MySQL
 |---|---|---|
 | Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | Team Lead |
 | Luciano Henrique | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end |
-| Thyago Baima | [Thyago098](https://github.com/Thyago098)   | DevOps |
-| Carlos Eduardo Sá Costa | [carloseduardo-Eng](https://github.com/carloseduardo-Eng)| Front-end |
+| Thyago Baima | [Thyago098](https://github.com/Thyago098) | DevOps |
+| Carlos Eduardo Sá Costa | [carloseduardo-Eng](https://github.com/carloseduardo-Eng) | Front-end |
+
 ## Status
 
 Em desenvolvimento.

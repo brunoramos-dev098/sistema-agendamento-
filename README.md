@@ -82,15 +82,34 @@ sistema-agendamento-/
 ├── src/
 │   └── main/
 │       └── java/
-│           └── .gitkeep
+│           ├── .gitkeep
+│           └── br/com/sistemaagendamento/dominio/
+│               ├── Usuario.java
+│               ├── Cliente.java
+│               ├── Profissional.java
+│               ├── Administrador.java
+│               ├── Servico.java
+│               ├── Disponibilidade.java
+│               ├── Agendamento.java
+│               └── StatusAgendamento.java
 └── database/
     └── modelo-dados.md
 ```
 
 - `docs/`: documentação geral, modelagem, fluxos de interface e Back-end, requisitos e registro futuro da imersão, conforme o índice acima.
 - `diagramas/`: diagramas iniciais em Mermaid, descritos no [guia da pasta](diagramas/README.md).
-- `src/`: espaço reservado para o código-fonte Java; a estrutura de pacotes será definida após a validação da arquitetura.
+- `src/`: código Java do modelo de domínio, no pacote `br.com.sistemaagendamento.dominio`.
 - `database/`: [modelo de dados previsto](database/modelo-dados.md), sem banco real ou SQL nesta etapa.
+
+## Modelo de domínio em Java
+
+As sete classes de domínio e o enum `StatusAgendamento` estão implementados em [src/main/java/br/com/sistemaagendamento/dominio](src/main/java/br/com/sistemaagendamento/dominio), conforme o [diagrama de classes](diagramas/diagrama-classes.md). O código utiliza apenas Java padrão e foi compilado e verificado com JDK 17.
+
+`Usuario` é abstrata e concentra os dados herdados por `Cliente`, `Profissional` e `Administrador`. Os campos são privados; os identificadores são recebidos no construtor, podem ser nulos antes da persistência e não possuem setter. As referências obrigatórias de `Agendamento` e `Disponibilidade`, suas datas, horários e o status não aceitam `null` nos construtores ou setters.
+
+A associação N:N usa `Set` nos dois lados, com consultas somente para leitura e métodos de adição e remoção que mantêm os vínculos sincronizados. A repetição da mesma instância é evitada; a identidade entre objetos carregados do banco será tratada na etapa de persistência. As demais relações são representadas pelas referências em `Agendamento` e `Disponibilidade`, sem listas inversas duplicadas.
+
+Conflitos de agenda, disponibilidade global e permissões de mudança de status continuam reservados aos futuros Services. Controllers, Services, Repositories, interface e integração com MySQL ainda não estão implementados.
 
 ## Primeira Entrega
 
@@ -123,7 +142,7 @@ Esta etapa prepara a base do projeto. As funcionalidades serão implementadas po
 | Estilos | CSS | Aparência dos componentes JavaFX |
 | Banco de dados | MySQL | Armazenamento dos dados do sistema |
 
-Essas tecnologias estão definidas para o desenvolvimento. A etapa atual contempla a documentação e a modelagem; as telas e a integração com MySQL ainda serão implementadas.
+Essas tecnologias estão definidas para o desenvolvimento. O modelo de domínio Java está implementado; as telas e a integração com MySQL ainda serão desenvolvidas.
 
 ## Equipe
 

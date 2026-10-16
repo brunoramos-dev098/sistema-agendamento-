@@ -35,7 +35,7 @@ Responsável pelos dados e comportamentos do domínio. É formada por:
 - **Servico**: serviço oferecido pelo estabelecimento.
 - **Disponibilidade**: período semanal disponível de um profissional.
 - **Agendamento**: atendimento associado a um cliente, profissional e serviço.
-- **StatusAgendamento**: enum previsto com `AGENDADO`, `CONFIRMADO`, `CANCELADO` e `CONCLUIDO`.
+- **StatusAgendamento**: enum implementado com `AGENDADO`, `CONFIRMADO`, `CANCELADO` e `CONCLUIDO`.
 
 O modelo é utilizado pelas camadas da aplicação conforme suas responsabilidades. As entidades estão documentadas em [entidades](entidades.md); StatusAgendamento é um tipo enumerado do domínio, não uma entidade com identidade própria.
 
@@ -55,6 +55,6 @@ MySQL
 
 O fluxo representa o encaminhamento de uma solicitação até a persistência; os resultados retornam às camadas anteriores. O modelo apoia essas interações e não representa uma etapa adicional depois do banco de dados.
 
-JavaFX compõe a camada de apresentação. Nenhum framework adicional para o Back-end ou para persistência foi definido. A estrutura de pacotes Java será detalhada na implementação.
+JavaFX compõe a camada de apresentação. Nenhum framework adicional para o Back-end ou para persistência foi definido. O domínio está implementado no pacote `br.com.sistemaagendamento.dominio`. Os pacotes das demais camadas serão definidos nas próximas etapas.
 
 A organização das camadas está representada no [diagrama de arquitetura](../diagramas/diagrama-arquitetura.md).

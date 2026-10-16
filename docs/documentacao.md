@@ -49,7 +49,7 @@ Esta documentação poderá evoluir conforme a imersão na comunidade e o levant
 
 ## Aplicação de POO
 
-A proposta inicial adota **Usuario como classe abstrata**, concentrando os atributos comuns herdados por Cliente, Profissional e Administrador. Isso explicita abstração e herança no modelo. O encapsulamento orientará a futura implementação dos dados e comportamentos dos objetos, com responsabilidades separadas entre as camadas.
+A proposta inicial adota **Usuario como classe abstrata**, concentrando os atributos comuns herdados por Cliente, Profissional e Administrador. Isso explicita abstração e herança no modelo. O encapsulamento está aplicado nas classes de domínio, com campos privados e acesso por métodos. As responsabilidades permanecem separadas entre as camadas.
 
 As associações representam os vínculos do domínio: cada Agendamento referencia Cliente, Profissional e Servico; Profissional possui períodos de Disponibilidade e se associa a serviços independentemente de agendamentos.
 
@@ -63,4 +63,4 @@ As tecnologias estão definidas. A implementação das telas, das regras de neg�
 
 Os [requisitos e regras de negócio](requisitos.md) orientam as [entidades](entidades.md), [relações](relacoes.md) e [dados](dados.md). A [arquitetura](arquitetura.md) organiza as responsabilidades, enquanto os [diagramas](../diagramas/README.md) e o [modelo de dados](../database/modelo-dados.md) oferecem visões complementares da mesma proposta.
 
-A [imersão na comunidade](imersao.md) servirá para validar os fluxos e as regras com os usuários. A equipe organizará os pacotes Java e implementará as telas em JavaFX, as regras de negócio e a persistência em MySQL durante o semestre.
+A [imersão na comunidade](imersao.md) servirá para validar os fluxos e as regras com os usuários. O pacote de domínio Java está implementado. As próximas etapas abrangem as telas em JavaFX, as regras de negócio nos Services e a persistência em MySQL.

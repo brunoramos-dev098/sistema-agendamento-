@@ -1,6 +1,6 @@
 # Entidades iniciais
 
-Esta é a proposta de modelagem da primeira entrega de **30/09/2026**. O modelo adota herança de Usuario e poderá evoluir durante o semestre, conforme a imersão e a validação dos requisitos. As classes ainda não foram implementadas.
+Esta é a proposta de modelagem da primeira entrega de **30/09/2026**. O modelo adota herança de Usuario e poderá evoluir durante o semestre, conforme a imersão e a validação dos requisitos. As classes estão implementadas no pacote `br.com.sistemaagendamento.dominio`.
 
 ## Usuario
 
@@ -98,7 +98,7 @@ Tipos Java sugeridos: `id: Long`, `data: LocalDate`, `horario: LocalTime`, `stat
 
 ## StatusAgendamento
 
-Será representado futuramente como um **enum Java**, com os valores:
+Está implementado como um **enum Java**, com os valores:
 
 | Valor | Significado inicial |
 |---|---|
@@ -113,4 +113,4 @@ Não é uma entidade com identidade própria. As condições e permissões para 
 
 Os atributos comuns de Cliente, Profissional e Administrador são herdados de Usuario. As associações estão em [relações](relacoes.md), os tipos em [dados](dados.md), as regras em [requisitos](requisitos.md) e a visão UML no [diagrama de classes](../diagramas/diagrama-classes.md).
 
-Na futura implementação, o encapsulamento deverá proteger os dados dos objetos, e a camada de serviço coordenará as operações e validações entre entidades. Não são definidos métodos adicionais nesta etapa.
+A implementação utiliza campos privados, construtores e getters. Os identificadores não possuem setters; as demais alterações são feitas por métodos públicos, preservando as referências obrigatórias. Profissional e Servico mantêm a associação N:N em conjuntos protegidos contra alteração direta. As operações e validações globais serão coordenadas pela futura camada de serviço.

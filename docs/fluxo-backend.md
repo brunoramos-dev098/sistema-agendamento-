@@ -4,7 +4,7 @@
 
 Este documento complementa o [fluxo da interface](fluxo-interface.md) e descreve o processamento previsto das solicitações do Sistema de Gerenciamento e Agendamento de Serviços. Segue a [arquitetura em camadas](arquitetura.md), os [requisitos](requisitos.md) e o modelo de domínio já documentado.
 
-Os componentes e fluxos são conceituais: nenhuma classe Java, integração de persistência ou funcionalidade é implementada nesta etapa.
+Controller, Service e Repository permanecem conceituais. As classes de domínio estão implementadas no pacote `br.com.sistemaagendamento.dominio`; os fluxos de aplicação e a integração com a persistência ainda serão desenvolvidos.
 
 ## 2. Responsabilidades do Back-end
 
@@ -129,7 +129,7 @@ Um agendamento cancelado deverá continuar registrado para fins de histórico, m
 
 ### Status do Agendamento
 
-O tipo StatusAgendamento está previsto como um enum Java com os seguintes valores:
+O tipo StatusAgendamento está implementado como um enum Java com os seguintes valores:
 
 ```text
 AGENDADO
@@ -215,9 +215,9 @@ O Back-end utilizará as classes e tipos já definidos no modelo inicial:
 - `Agendamento`.
 - `StatusAgendamento`.
 
-Usuario será uma classe abstrata.
-Cliente, Profissional e Administrador serão suas subclasses.
-StatusAgendamento será um enum e não uma entidade com identidade própria.
+Usuario é uma classe abstrata.
+Cliente, Profissional e Administrador são suas subclasses.
+StatusAgendamento é um enum e não uma entidade com identidade própria.
 
 Cada Agendamento referencia exatamente um Cliente, Profissional e Servico. Profissional possui períodos de Disponibilidade e se associa a Servico em uma relação N:N, independente de agendamentos. Essas definições estão em [entidades](entidades.md), [relações](relacoes.md) e [dados](dados.md).
 

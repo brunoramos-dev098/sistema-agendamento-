@@ -65,7 +65,7 @@ As referências representam associações entre objetos. No modelo de persistên
 
 ## StatusAgendamento
 
-Enum Java previsto, ainda sem arquivo de implementação:
+Enum Java implementado no pacote `br.com.sistemaagendamento.dominio`:
 
 | Valor | Descrição |
 |---|---|
@@ -74,4 +74,4 @@ Enum Java previsto, ainda sem arquivo de implementação:
 | CANCELADO | Atendimento cancelado; não ocupa horário |
 | CONCLUIDO | Atendimento realizado |
 
-As transições serão detalhadas posteriormente. A relação N:N entre Profissional e Servico é uma associação do modelo, não um novo atributo escalar; sua representação em coleções Java será definida na implementação. Os tipos e associações estão alinhados ao [diagrama de classes](../diagramas/diagrama-classes.md).
+As transições serão detalhadas posteriormente. A relação N:N entre Profissional e Servico é uma associação do modelo, não um novo atributo escalar; sua implementação utiliza `Set<Servico>` em Profissional e `Set<Profissional>` em Servico. Os conjuntos são expostos para leitura, e a adição ou remoção de vínculos atualiza os dois lados. Os tipos e associações estão alinhados ao [diagrama de classes](../diagramas/diagrama-classes.md).

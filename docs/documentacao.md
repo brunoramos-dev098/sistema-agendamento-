@@ -2,7 +2,7 @@
 
 ## Introdução
 
-O Sistema de Gerenciamento e Agendamento de Serviços para Pequenos Estabelecimentos é um projeto acadêmico da disciplina de Programação Orientada a Objetos. Será desenvolvido em Java para aplicar conceitos de POO à organização de atendimentos em barbearias, salões de beleza, manicures, clínicas de estética e outros pequenos prestadores de serviço.
+O Sistema de Gerenciamento e Agendamento de Serviços para Pequenos Estabelecimentos é um projeto acadêmico da disciplina de Programação Orientada a Objetos. É desenvolvido em TypeScript para aplicar conceitos de POO à organização de atendimentos em barbearias, salões de beleza, manicures, clínicas de estética e outros pequenos prestadores de serviço.
 
 ## Problema identificado
 
@@ -49,18 +49,12 @@ Esta documentação poderá evoluir conforme a imersão na comunidade e o levant
 
 ## Aplicação de POO
 
-A proposta inicial adota **Usuario como classe abstrata**, concentrando os atributos comuns herdados por Cliente, Profissional e Administrador. Isso explicita abstração e herança no modelo. O encapsulamento orientará a futura implementação dos dados e comportamentos dos objetos, com responsabilidades separadas entre as camadas.
+A proposta inicial adota **Usuario como classe abstrata**, concentrando os atributos comuns herdados por Cliente, Profissional e Administrador. Isso explicita abstração e herança no modelo. O encapsulamento protege os dados e comportamentos dos objetos, com responsabilidades separadas entre as camadas.
 
 As associações representam os vínculos do domínio: cada Agendamento referencia Cliente, Profissional e Servico; Profissional possui períodos de Disponibilidade e se associa a serviços independentemente de agendamentos.
 
-## Tecnologias do sistema
+## Tecnologias e evolução
 
-A aplicação será desenvolvida em Java. A interface desktop utilizará JavaFX, com layouts em FXML, edição visual no Scene Builder e estilos em CSS. Os dados serão armazenados em MySQL, com acesso pela camada de persistência.
+React, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query e React Hook Form + Zod na web. Node.js 24, NestJS e Prisma ORM 7 com PostgreSQL no servidor. A primeira entrega acadêmica permanece no histórico Git. Consulte [migração](migracao.md) para situação verificável e limites atuais. Nenhuma entrevista ou validação de campo foi realizada por esta migração.
 
-As tecnologias estão definidas. A implementação das telas, das regras de negócio e da integração com o banco faz parte das próximas etapas do projeto.
-
-## Organização da documentação e evolução
-
-Os [requisitos e regras de negócio](requisitos.md) orientam as [entidades](entidades.md), [relações](relacoes.md) e [dados](dados.md). A [arquitetura](arquitetura.md) organiza as responsabilidades, enquanto os [diagramas](../diagramas/README.md) e o [modelo de dados](../database/modelo-dados.md) oferecem visões complementares da mesma proposta.
-
-A [imersão na comunidade](imersao.md) servirá para validar os fluxos e as regras com os usuários. A equipe organizará os pacotes Java e implementará as telas em JavaFX, as regras de negócio e a persistência em MySQL durante o semestre.
+[Arquitetura](arquitetura.md), [requisitos](requisitos.md), [entidades](entidades.md), [relações](relacoes.md), [dados](dados.md) e [imersão](imersao.md).

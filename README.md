@@ -52,7 +52,7 @@ Teste concorrente real exige banco de teste migrado e TEST_DATABASE_URL. Ele cri
 
 Base funcional com cadastros e edição, associação profissional/serviço, disponibilidade semanal, consulta de horários, criação e alteração de agendamentos, status, cancelamento e histórico. Interface inclui dashboard, clientes, profissionais, serviços, agenda com filtros e formulário de agendamento. Slots em passos de 15 minutos; API valida intervalo completo. Cancelamentos não apagam registros. Reagendamento via API ignora o próprio ID. Autenticação e autorização não foram definidas: executar localmente, sem exposição pública até implementá-las.
 
-Pendências: validar imersão, permissões e transições com usuários; aprimorar edição de disponibilidade e vínculos na interface, paginação, auditoria e testes completos de navegação. A execução de integrações depende de PostgreSQL disponível. Consulte [migração e histórico](docs/migracao.md).
+Pendências: validar imersão, permissões e transições com usuários; aprimorar edição de disponibilidade e vínculos na interface, paginação, auditoria e testes completos de navegação. Integrações de concorrência e HTTP foram aprovadas na CI com PostgreSQL 17; reprodução local exige banco de teste. Consulte [migração e histórico](docs/migracao.md).
 
 ## Documentação
 

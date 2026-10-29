@@ -1,0 +1,16 @@
+CREATE TYPE "StatusAgendamento" AS ENUM ('AGENDADO','CONFIRMADO','CANCELADO','CONCLUIDO');
+CREATE TABLE "Cliente" (id uuid PRIMARY KEY,nome text NOT NULL,telefone text NOT NULL,email text NOT NULL UNIQUE);
+CREATE TABLE "Profissional" (id uuid PRIMARY KEY,nome text NOT NULL,telefone text NOT NULL,email text NOT NULL UNIQUE,especialidade text NOT NULL);
+CREATE TABLE "Administrador" (id uuid PRIMARY KEY,nome text NOT NULL,telefone text NOT NULL,email text NOT NULL UNIQUE);
+CREATE TABLE "Servico" (id uuid PRIMARY KEY,nome text NOT NULL,descricao text NOT NULL,preco numeric(10,2) NOT NULL,duracao integer NOT NULL);
+CREATE TABLE "ProfissionalServico" ("profissionalId" uuid NOT NULL REFERENCES "Profissional"(id) ON DELETE RESTRICT ON UPDATE CASCADE,"servicoId" uuid NOT NULL REFERENCES "Servico"(id) ON DELETE RESTRICT ON UPDATE CASCADE,PRIMARY KEY("profissionalId","servicoId"));
+CREATE TABLE "Disponibilidade" (id uuid PRIMARY KEY,"diaSemana" integer NOT NULL,"inicioMinuto" integer NOT NULL,"fimMinuto" integer NOT NULL,"profissionalId" uuid NOT NULL REFERENCES "Profissional"(id) ON DELETE RESTRICT ON UPDATE CASCADE);
+CREATE TABLE "Agendamento" (id uuid PRIMARY KEY,inicio timestamptz(3) NOT NULL,fim timestamptz(3) NOT NULL,status "StatusAgendamento" NOT NULL DEFAULT 'AGENDADO',"clienteId" uuid NOT NULL REFERENCES "Cliente"(id) ON DELETE RESTRICT ON UPDATE CASCADE,"profissionalId" uuid NOT NULL REFERENCES "Profissional"(id) ON DELETE RESTRICT ON UPDATE CASCADE,"servicoId" uuid NOT NULL REFERENCES "Servico"(id) ON DELETE RESTRICT ON UPDATE CASCADE);
+CREATE INDEX "Disponibilidade_profissionalId_diaSemana_idx" ON "Disponibilidade"("profissionalId","diaSemana");
+CREATE INDEX "Agendamento_profissionalId_inicio_idx" ON "Agendamento"("profissionalId",inicio);
+CREATE INDEX "Agendamento_clienteId_inicio_idx" ON "Agendamento"("clienteId",inicio);
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+ALTER TABLE "Servico" ADD CONSTRAINT "Servico_preco_valido" CHECK (preco >= 0), ADD CONSTRAINT "Servico_duracao_valida" CHECK (duracao BETWEEN 1 AND 1440);
+ALTER TABLE "Disponibilidade" ADD CONSTRAINT "Disponibilidade_periodo_valido" CHECK ("diaSemana" BETWEEN 1 AND 7 AND "inicioMinuto" >= 0 AND "fimMinuto" <= 1440 AND "inicioMinuto" < "fimMinuto");
+ALTER TABLE "Agendamento" ADD CONSTRAINT "Agendamento_intervalo_valido" CHECK (inicio < fim);
+ALTER TABLE "Agendamento" ADD CONSTRAINT "Agendamento_sem_sobreposicao" EXCLUDE USING gist ("profissionalId" WITH =, tstzrange(inicio, fim, '[)') WITH &&) WHERE (status <> 'CANCELADO');

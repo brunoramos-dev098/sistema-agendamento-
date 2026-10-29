@@ -1,139 +1,75 @@
-# Sistema de Gerenciamento e Agendamento de Serviços
+# Checkapp
 
-Projeto acadêmico desenvolvido na disciplina de Programação Orientada a Objetos (POO), em Java, para aplicar conceitos de POO na solução de um problema real: a organização de serviços e agendamentos em pequenos estabelecimentos.
+Sistema de Gerenciamento e Agendamento de Serviços para Pequenos Estabelecimentos. Projeto acadêmico de Programação Orientada a Objetos para barbearias, salões, manicures, clínicas de estética e profissionais autônomos.
 
-## Sobre o Projeto
+## Stack e arquitetura
 
-Pequenos prestadores de serviço frequentemente utilizam WhatsApp, agendas físicas ou outros métodos manuais para controlar seus atendimentos. O projeto propõe centralizar essas informações e facilitar a organização da agenda.
+Node.js 24 LTS, TypeScript strict 5.9, React 19, Vite 7, Tailwind CSS 4, React Router 7, TanStack Query 5, React Hook Form 7 e Zod 4. API REST NestJS 12, Prisma ORM 7 com adapter PostgreSQL e PostgreSQL local ou Supabase. Versões resolvidas no único package-lock.json. ESLint 10, Prettier 3 e Vitest 5.
 
-## Problema
+Controller → Service → Repository → PostgreSQL; domínio TypeScript independente dos modelos de persistência. Usuario abstrato preserva herança e encapsulamento. React consome a API, sem dados fictícios. Transações Serializable e restrição de exclusão PostgreSQL impedem reservas sobrepostas.
 
-- Agendamentos dispersos em conversas de WhatsApp e agendas físicas.
-- Conflitos de horário entre atendimentos.
-- Esquecimentos de agendamentos.
-- Dificuldade de organização da agenda dos profissionais.
-- Ausência de histórico de atendimentos.
-- Dificuldade para visualizar horários disponíveis e acompanhar cancelamentos e alterações.
+## Estrutura
 
-## Objetivo Geral
+```text
+apps/web/src/    components, pages, hooks, services, types, App.tsx
+apps/api/src/    common, domain, modules, prisma, main.ts
+apps/api/prisma/ schema.prisma e migrations versionadas
+docs/           requisitos, arquitetura, fluxos e registro da migração
+diagramas/      classes, arquitetura e entidade-relacionamento
+database/       estratégia PostgreSQL
+```
 
-Desenvolver uma aplicação orientada a objetos para centralizar e organizar o gerenciamento de clientes, profissionais, serviços, disponibilidade e agendamentos.
+## Execução local
 
-## Objetivos Específicos
+Instale Node.js 24 com npm e PostgreSQL com extensão btree_gist disponível. Crie usuário/banco local checkapp (credenciais ilustrativas no exemplo). Na raiz:
 
-- Cadastrar clientes.
-- Cadastrar profissionais.
-- Cadastrar serviços.
-- Associar serviços aos profissionais.
-- Registrar disponibilidade dos profissionais.
-- Consultar horários disponíveis.
-- Criar e consultar agendamentos.
-- Impedir conflitos de horário.
-- Permitir alteração e cancelamento de agendamentos.
-- Acompanhar o status dos agendamentos.
-- Armazenar histórico de atendimentos.
+```sh
+npm ci
+cp .env.example .env
+npm run db:generate
+npm run db:validate
+npm run db:migrate
+npm run dev
+```
 
-## Público-Alvo
+No PowerShell use Copy-Item .env.example .env. Ajuste DATABASE_URL (API) e DIRECT_DATABASE_URL (migrations) antes de migrar. Scripts carregam .env da raiz. Nunca commitar credenciais. Supabase é opcional: use conexão PostgreSQL do projeto, conexão direta para migrations e TLS validado. Não execute operações destrutivas em banco remoto.
 
-- Barbearias.
-- Salões de beleza.
-- Manicures.
-- Clínicas de estética.
-- Profissionais autônomos.
+Web: http://localhost:5173. API: http://127.0.0.1:3000. Individualmente: npm run dev -w apps/web e npm run dev -w apps/api. Desenvolvimento da API compila antes de iniciar; após editar TypeScript execute build novamente. PORT e WEB_ORIGIN são opcionais. Proxy Vite encaminha /api para o servidor local; produção deve configurar um reverse proxy equivalente. DATABASE_URL nunca é exposta no frontend.
+
+## Verificação
+
+```sh
+npm run typecheck
+npm run lint
+npm test
+npm run build
+npm run db:validate
+```
+
+Teste concorrente real exige banco de teste migrado e TEST_DATABASE_URL. Ele cria registros isolados e remove apenas seus próprios dados. Sem essa variável, é marcado como ignorado. Veja [resultados reais](docs/verificacao.md).
+
+## Situação da implementação
+
+Base funcional com cadastros e edição, associação profissional/serviço, disponibilidade semanal, consulta de horários, criação e alteração de agendamentos, status, cancelamento e histórico. Interface inclui dashboard, clientes, profissionais, serviços, agenda com filtros e formulário de agendamento. Slots em passos de 15 minutos; API valida intervalo completo. Cancelamentos não apagam registros. Reagendamento via API ignora o próprio ID. Autenticação e autorização não foram definidas: executar localmente, sem exposição pública até implementá-las.
+
+Pendências: validar imersão, permissões e transições com usuários; aprimorar edição de disponibilidade e vínculos na interface, paginação, auditoria e testes completos de navegação. Integrações de concorrência e HTTP foram aprovadas na CI com PostgreSQL 17; reprodução local exige banco de teste. Consulte [migração e histórico](docs/migracao.md).
 
 ## Documentação
 
-| Documento | Conteúdo |
-|---|---|
-| [Documentação geral](docs/documentacao.md) | Contexto, justificativa, objetivos, usuários e aplicação de POO |
-| [Arquitetura](docs/arquitetura.md) | Responsabilidades das camadas e modelo de domínio |
-| [Fluxo da interface](docs/fluxo-interface.md) | Telas previstas, navegação e encaminhamento das solicitações ao Controller |
-| [Fluxo do Back-end](docs/fluxo-backend.md) | Componentes conceituais, processamento de agendamentos e validações RN01–RN07 |
-| [Entidades](docs/entidades.md) | Usuario abstrato, subclasses e entidades do agendamento |
-| [Relações](docs/relacoes.md) | Herança, associações e cardinalidades |
-| [Dados](docs/dados.md) | Atributos, tipos Java sugeridos e status |
-| [Requisitos](docs/requisitos.md) | Requisitos funcionais, não funcionais e regras de negócio |
-| [Imersão na comunidade](docs/imersao.md) | Modelo para registro da coleta futura |
-| [Modelo de dados](database/modelo-dados.md) | Tabelas conceituais e chaves previstas |
-| [Diagramas](diagramas/README.md) | Diagramas de classes, arquitetura e entidade-relacionamento |
-
-O modelo inicial adota **Usuario como classe abstrata**, herdada por Cliente, Profissional e Administrador. Disponibilidade representa os períodos semanais dos profissionais, e a associação N:N entre Profissional e Servico indica quais serviços cada profissional oferece. Agendamento reúne cliente, profissional, serviço, data, horário e status. Essa proposta será validada durante a imersão e poderá evoluir no semestre.
-
-## Estrutura do Projeto
-
-```text
-sistema-agendamento-/
-├── README.md
-├── docs/
-│   ├── documentacao.md
-│   ├── arquitetura.md
-│   ├── fluxo-interface.md
-│   ├── fluxo-backend.md
-│   ├── entidades.md
-│   ├── relacoes.md
-│   ├── dados.md
-│   ├── requisitos.md
-│   └── imersao.md
-├── diagramas/
-│   ├── README.md
-│   ├── diagrama-classes.md
-│   ├── diagrama-arquitetura.md
-│   └── diagrama-entidade-relacionamento.md
-├── src/
-│   └── main/
-│       └── java/
-│           └── .gitkeep
-└── database/
-    └── modelo-dados.md
-```
-
-- `docs/`: documentação geral, modelagem, fluxos de interface e Back-end, requisitos e registro futuro da imersão, conforme o índice acima.
-- `diagramas/`: diagramas iniciais em Mermaid, descritos no [guia da pasta](diagramas/README.md).
-- `src/`: espaço reservado para o código-fonte Java; a estrutura de pacotes será definida após a validação da arquitetura.
-- `database/`: [modelo de dados previsto](database/modelo-dados.md), sem banco real ou SQL nesta etapa.
-
-## Primeira Entrega
-
-**Data: 30/09/2026**
-
-Conteúdo:
-
-- Documentação.
-- Organização do repositório.
-- Arquitetura inicial.
-- Entidades.
-- Relações entre entidades.
-- Estrutura de dados.
-- Diagramas iniciais.
-
-Esta etapa prepara a base do projeto. As funcionalidades serão implementadas posteriormente, após o levantamento e a validação dos requisitos.
-
-## Tecnologias
-
-- Java.
-- Programação Orientada a Objetos.
-- Git.
-- GitHub.
-
-| Área | Tecnologia | Uso no projeto |
-|---|---|---|
-| Interface | JavaFX | Componentes e interação nas telas da aplicação desktop |
-| Estrutura das telas | FXML | Descrição dos layouts |
-| Edição visual | Scene Builder | Montagem e edição dos layouts FXML |
-| Estilos | CSS | Aparência dos componentes JavaFX |
-| Banco de dados | MySQL | Armazenamento dos dados do sistema |
-
-Essas tecnologias estão definidas para o desenvolvimento. A etapa atual contempla a documentação e a modelagem; as telas e a integração com MySQL ainda serão implementadas.
+- [Documentação geral](docs/documentacao.md)
+- [Arquitetura](docs/arquitetura.md)
+- [Fluxo da interface](docs/fluxo-interface.md) e [API/endpoints](docs/fluxo-backend.md)
+- [Entidades](docs/entidades.md), [relações](docs/relacoes.md) e [dados](docs/dados.md)
+- [Requisitos RF01–RF11 e RN01–RN07](docs/requisitos.md)
+- [Imersão na comunidade](docs/imersao.md)
+- [Modelo PostgreSQL](database/modelo-dados.md)
+- [Diagramas](diagramas/README.md)
 
 ## Equipe
 
-| Integrante | GitHub | Papel |
-|---|---|---|
-| Bruno Ramos | [@brunoramos-dev098](https://github.com/brunoramos-dev098) | Team Lead |
-| Luciano Henrique | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end |
-| Thyago Baima | [Thyago098](https://github.com/Thyago098) | DevOps |
-| Carlos Eduardo Sá Costa | [carloseduardo-Eng](https://github.com/carloseduardo-Eng) | Front-end |
-
-## Status
-
-Em desenvolvimento.
+| Integrante              | GitHub                                                            | Papel     |
+| ----------------------- | ----------------------------------------------------------------- | --------- |
+| Bruno Ramos             | [@brunoramos-dev098](https://github.com/brunoramos-dev098)        | Team Lead |
+| Luciano Henrique        | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end  |
+| Thyago Baima            | [Thyago098](https://github.com/Thyago098)                         | DevOps    |
+| Carlos Eduardo Sá Costa | [carloseduardo-Eng](https://github.com/carloseduardo-Eng)         | Front-end |

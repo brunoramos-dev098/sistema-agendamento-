@@ -7,7 +7,7 @@ Executado no Windows com Node.js 24.22.1 e npm 11.6.2.
 - ESLint: aprovado.
 - Builds NestJS e Vite: aprovados. Rollup informa duas anotações PURE de Zod descartadas, sem impedir build.
 - Vitest: 11 testes de domínio e 2 de formulários aprovados.
-- Teste PostgreSQL concorrente: ignorado porque TEST_DATABASE_URL não foi configurada. Migration gerada com prisma migrate diff --from-empty e complementada com constraints, sem aplicação em banco.
+- Teste PostgreSQL concorrente: ignorado porque TEST_DATABASE_URL não foi configurada. SQL inicial escrito conforme o schema e complementado com constraints. A primeira CI detectou DDL ausente na saída do comando migrate diff; a migration foi corrigida para criar todas as tabelas antes das constraints.
 - npm install / audit: zero vulnerabilidades após atualização de dependências.
 - Chrome headless: seis rotas renderizadas, sem erros JavaScript; viewport móvel 390px sem overflow horizontal. Sem PostgreSQL/API ativa, isso verifica a apresentação e não o fluxo persistido.
 

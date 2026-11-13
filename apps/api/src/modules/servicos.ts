@@ -1,3 +1,4 @@
+import { Roles } from "../auth/access.js";
 import {
   Module,
   Controller,
@@ -33,10 +34,13 @@ class Service {
     return this.repo.save(dto, id);
   }
 }
+@Roles("ADMINISTRADOR")
 @Controller("servicos")
 class ApiController {
   constructor(private readonly service: Service) {}
-  @Get() list() {
+  @Roles("CLIENTE", "PROFISSIONAL", "ADMINISTRADOR")
+  @Get()
+  list() {
     return this.service.list();
   }
   @Post() create(@Body() dto: ServicoDto) {

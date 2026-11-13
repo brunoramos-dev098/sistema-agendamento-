@@ -1,4 +1,6 @@
+import { Roles, AuthRequest } from "../auth/access.js";
 import {
+  Req,
   Module,
   Controller,
   Get,
@@ -14,9 +16,26 @@ import { ProfissionalDto } from "../common/dto.js";
 @Injectable()
 class Repository {
   constructor(private readonly db: PrismaService) {}
-  list() {
+  list(u: AuthRequest["user"]) {
     return this.db.profissional.findMany({
-      include: { servicos: true, disponibilidades: true },
+      select:
+        u.perfil === "ADMINISTRADOR"
+          ? {
+              id: true,
+              nome: true,
+              telefone: true,
+              email: true,
+              especialidade: true,
+              servicos: true,
+              disponibilidades: true,
+            }
+          : {
+              id: true,
+              nome: true,
+              especialidade: true,
+              servicos: true,
+              disponibilidades: true,
+            },
     });
   }
   save(data: ProfissionalDto, id?: string) {
@@ -39,18 +58,21 @@ class Repository {
 @Injectable()
 class Service {
   constructor(private readonly repo: Repository) {}
-  list() {
-    return this.repo.list();
+  list(u: AuthRequest["user"]) {
+    return this.repo.list(u);
   }
   save(dto: ProfissionalDto, id?: string) {
     return this.repo.save(dto, id);
   }
 }
+@Roles("ADMINISTRADOR")
 @Controller("profissionais")
 class ApiController {
   constructor(private readonly service: Service) {}
-  @Get() list() {
-    return this.service.list();
+  @Roles("CLIENTE", "PROFISSIONAL", "ADMINISTRADOR")
+  @Get()
+  list(@Req() r: AuthRequest) {
+    return this.service.list(r.user);
   }
   @Post() create(@Body() dto: ProfissionalDto) {
     return this.service.save(dto);

@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import { AuthModule } from "./auth/auth.module.js";
 import { PrismaFilter } from "./common/prisma.filter.js";
 import { config } from "dotenv";
 config({ path: "../../.env" });
@@ -16,6 +17,7 @@ class PrismaModule {}
 @Module({
   imports: [
     PrismaModule,
+    AuthModule,
     AgendaModule,
     clientesModule,
     profissionaisModule,

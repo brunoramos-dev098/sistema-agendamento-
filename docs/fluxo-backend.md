@@ -17,4 +17,4 @@ DTO → ValidationPipe → Controller → Service → Repository/Prisma → Post
 
 Criação e alteração verificam referências obrigatórias (RN06), passado (RN02), associação (RN03), disponibilidade integral (RN04), sobreposição com duração (RN01/RN05) e exclusão dos cancelados da ocupação (RN07). Usam transação Serializable; a restrição PostgreSQL de exclusão é a defesa final contra concorrência. Cancelar faz UPDATE, nunca DELETE. Reativar cancelado revalida o intervalo histórico. Não há endpoints de exclusão de cadastros para evitar perda de histórico.
 
-Exemplo: 10h–11h impede 10h30 e permite 11h. Todos os horários do estabelecimento usam America/Fortaleza; API retorna instantes UTC. Não há autenticação: executar apenas em ambiente local até definir identidade e autorização reais.
+Exemplo: 10h–11h impede 10h30 e permite 11h. Todos os horários do estabelecimento usam America/Fortaleza; API retorna instantes UTC. O guard global exige sessão e as operações aplicam perfil e propriedade conforme acessos.md.

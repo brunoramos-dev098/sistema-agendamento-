@@ -29,6 +29,8 @@ cp .env.example .env
 npm run db:generate
 npm run db:validate
 npm run db:migrate
+npm run build -w apps/api
+npm run auth:admin -w apps/api
 npm run dev
 ```
 
@@ -50,9 +52,9 @@ Teste concorrente real exige banco de teste migrado e TEST_DATABASE_URL. Ele cri
 
 ## Situação da implementação
 
-Base funcional com cadastros e edição, associação profissional/serviço, disponibilidade semanal, consulta de horários, criação e alteração de agendamentos, status, cancelamento e histórico. Interface inclui dashboard, clientes, profissionais, serviços, agenda com filtros e formulário de agendamento. Slots em passos de 30 minutos; API valida intervalo completo. Cancelamentos não apagam registros. Reagendamento via API ignora o próprio ID. Autenticação e autorização não foram definidas: executar localmente, sem exposição pública até implementá-las.
+Base funcional com cadastros e edição, associação profissional/serviço, disponibilidade semanal, consulta de horários, criação e alteração de agendamentos, status, cancelamento e histórico. Interface inclui dashboard, clientes, profissionais, serviços, agenda com filtros e formulário de agendamento. Slots em passos de 30 minutos; API valida intervalo completo. Cancelamentos não apagam registros. Reagendamento via API ignora o próprio ID. Login e autorização por perfil implementados. Clientes e profissionais acessam somente seus dados e atendimentos; o administrador gerencia o estabelecimento. Veja docs/acessos.md.
 
-Pendências: validar imersão, permissões e transições com usuários; aprimorar edição de disponibilidade e vínculos na interface, paginação, auditoria e testes completos de navegação. Integrações de concorrência e HTTP foram aprovadas na CI com PostgreSQL 17; reprodução local exige banco de teste. Consulte [migração e histórico](docs/migracao.md).
+Pendências: validar imersão e transições com usuários; aprimorar edição de disponibilidade e vínculos na interface, paginação, auditoria e testes completos de navegação. Integrações de concorrência e HTTP foram aprovadas na CI com PostgreSQL 17; reprodução local exige banco de teste. Consulte [migração e histórico](docs/migracao.md).
 
 ## Documentação
 
@@ -77,3 +79,7 @@ Pendências: validar imersão, permissões e transições com usuários; aprimor
 ## Agendamento simplificado
 
 Acesse /novo para cadastrar-se ou selecionar um cliente, escolher serviço e profissional por cartões, navegar no calendário e reservar um bloco de 30 minutos. Padrão dos profissionais: segunda a sábado, 09:00–19:30 (último início 19:00), em São Luís (MA). Horários ocupados saem da lista, atualizada a cada cinco segundos. Veja [jornada do cliente](docs/agenda-cliente.md).
+
+## Acessos por perfil
+
+Use email e senha para entrar. Clientes têm cadastro público; o administrador cria acessos de cadastros existentes em Contas e acessos. Credenciais iniciais do administrador: arquivo local .tools/acesso-admin.txt, criado pelo comando auth:admin e ignorado pelo Git. [Permissões, sessões e instruções](docs/acessos.md).

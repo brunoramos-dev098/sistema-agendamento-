@@ -45,7 +45,7 @@ Pessoa responsável pela gestão do estabelecimento e das informações do siste
 
 A entrega de **30/09/2026** contempla documentação, organização do repositório, arquitetura inicial, entidades, relações, estrutura de dados, requisitos e diagramas iniciais. Não inclui a aplicação completa, funcionalidades implementadas ou um banco de dados real.
 
-Esta documentação poderá evoluir conforme a imersão na comunidade e o levantamento de requisitos forem realizados. Os perfis acima representam papéis iniciais; permissões e formas de acesso serão detalhadas posteriormente com a equipe.
+Esta documentação poderá evoluir conforme a imersão na comunidade e o levantamento de requisitos forem realizados. Os perfis possuem login e permissões implementados, descritos em acessos.md. O refinamento com usuários continua previsto.
 
 ## Aplicação de POO
 

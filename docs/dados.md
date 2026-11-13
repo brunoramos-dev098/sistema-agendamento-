@@ -21,3 +21,7 @@ Status tem exatamente AGENDADO, CONFIRMADO, CANCELADO e CONCLUIDO. Cancelamento 
 ## Horário de São Luís (MA)
 
 A interface usa o nome São Luís (MA). O identificador técnico America/Fortaleza também cobre o Maranhão, conforme a tabela IANA: https://raw.githubusercontent.com/eggert/tz/main/zone1970.tab. Mantê-lo preserva a interpretação dos horários e dos registros existentes. A lista de horários depende da disponibilidade do profissional no dia da semana selecionado, da duração integral do serviço e das reservas existentes.
+
+## Autenticação
+
+Conta possui UUID, email único normalizado, senhaHash scrypt e perfil enum. Exatamente um vínculo obrigatório conforme perfil: clienteId, profissionalId ou administradorId, cada um único. Sessao guarda tokenHash SHA-256 como PK, contaId com FK Cascade e expiraEm timestamptz, com índices por conta e expiração. Nenhum registro antigo recebe senha automática.

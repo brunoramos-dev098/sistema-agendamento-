@@ -5,7 +5,7 @@ Implementação: apps/api/src/domain/model.ts.
 - Usuario: classe abstrata, id, nome, telefone e email somente para leitura; construtor protegido.
 - Cliente: herda Usuario sem duplicar atributos; possui 0..N agendamentos.
 - Profissional: herda Usuario, especialidade, serviços e disponibilidades. Coleções privadas retornam cópias; métodos sincronizam associação com Servico.
-- Administrador: herda Usuario; representa gestão, sem regras de autorização inventadas.
+- Administrador: herda Usuario; representa gestão; o acesso administrativo exige conta vinculada e perfil ADMINISTRADOR.
 - Servico: id, nome, descricao, preco decimal em string, duracao em minutos, profissionais. Valida dinheiro e duração.
 - Disponibilidade: id, diaSemana ISO 1–7, inicioMinuto, fimMinuto, profissional. Valida limites e ordenação do período.
 - Agendamento: id, inicio, fim, status encapsulado, exatamente um cliente, profissional e serviço. Método alterarStatus preserva identidade.

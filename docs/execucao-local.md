@@ -13,3 +13,7 @@ Acesse http://127.0.0.1:5173/clientes. O script pode ser executado novamente; se
 Logs: .tools/api.log, .tools/api-error.log, .tools/web-server.log, .tools/web-server-error.log e .tools/postgres-error.log. Não remova .tools/pgdata: ela contém seus cadastros. Faça backup do banco antes de limpar arquivos locais. Não publique o .env ou o conteúdo de .tools/.
 
 Validação executada em 13/11/2026: migration aplicada no PostgreSQL local; GET /api/clientes com HTTP 200; cadastro e leitura no banco aprovados, com remoção apenas do registro temporário de verificação; restrição de conflitos presente. Tela de clientes verificada no Chrome.
+
+## Entrar como administrador
+
+A configuração atual possui administrador com credenciais no arquivo local .tools/acesso-admin.txt. Abra o site e use email/senha desse arquivo. Em Meu cadastro, altere sua senha. Para ativar os cadastros antigos de clientes e profissionais, use Contas e acessos, escolha a pessoa e defina uma senha inicial. Os dados antigos não foram apagados nem recebem senha previsível. Clientes novos usam o cadastro público.

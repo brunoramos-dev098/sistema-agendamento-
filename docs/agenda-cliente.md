@@ -4,7 +4,7 @@ Decisão funcional de 13/11/2026: serviços de 30 minutos e expediente padrão d
 
 ## Jornada do cliente
 
-Em /novo, o cliente pode cadastrar nome, telefone e email ou selecionar um cadastro existente. Após cadastrar, o fluxo continua nos cartões de serviço e de profissional (com especialidade). A seleção do cadastro é lembrada apenas na sessão do navegador; não representa login nem autenticação. O cadastro feito em /clientes também encaminha para /novo. A lista de serviços oferece o link Agendar este serviço.
+A entrada usa login ou cadastro público de cliente com nome, telefone, email e senha. O cliente agenda para seu próprio ID autenticado; somente o administrador pode selecionar outros clientes. Cadastros antigos recebem acesso pelo administrador, preservando seu histórico. Após entrar, o fluxo continua nos cartões de serviço e profissional. A lista de serviços oferece o link Agendar este serviço.
 
 O calendário permite percorrer semanas e escolher diretamente uma data futura. Cada botão de horário representa um intervalo de 30 minutos. Selecionar um bloco apresenta um resumo; a confirmação registra na API. Horários ocupados são omitidos, cancelados voltam a aparecer e datas passadas são rejeitadas. A lista é consultada novamente a cada cinco segundos e após confirmação ou erro. A consulta não garante a reserva: duas confirmações simultâneas são protegidas por transação Serializable e pela restrição EXCLUDE do PostgreSQL.
 

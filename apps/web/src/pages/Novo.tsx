@@ -1,3 +1,4 @@
+import { useAuth } from "../auth/Auth";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLista } from "../hooks/useLista";
@@ -30,6 +31,7 @@ const horaLocal = (iso: string) =>
   }).format(new Date(iso));
 
 export function Novo() {
+  const { user } = useAuth();
   const clientes = useLista<Registro>("clientes");
   const servicos = useLista<Registro>("servicos");
   const profissionais = useLista<Registro>("profissionais");
@@ -44,7 +46,9 @@ export function Novo() {
   const hoje = hojeLocal();
   const inicial = domingo(hoje) ? somarDias(hoje, 1) : hoje;
   const [c, setC] = useState(
-    sessionStorage.getItem("checkapp.clienteId") ?? "",
+    user?.perfil === "CLIENTE"
+      ? user.clienteId!
+      : (sessionStorage.getItem("checkapp.clienteId") ?? ""),
   );
   const [s, setS] = useState(params.get("servicoId") ?? "");
   const [p, setP] = useState("");
@@ -161,9 +165,11 @@ export function Novo() {
               <strong>{cliente.nome}</strong>
               <small>Agendando para este cadastro</small>
             </div>
-            <button className="secondary" onClick={() => escolherCliente("")}>
-              Trocar cliente
-            </button>
+            {user?.perfil === "ADMINISTRADOR" && (
+              <button className="secondary" onClick={() => escolherCliente("")}>
+                Trocar cliente
+              </button>
+            )}
           </div>
         ) : (
           <>

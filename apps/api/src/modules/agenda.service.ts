@@ -1,4 +1,6 @@
+import { Actor, exigirDono } from "../auth/access.js";
 import {
+  ForbiddenException,
   Injectable,
   BadRequestException,
   ConflictException,
@@ -12,10 +14,15 @@ import { StatusAgendamento } from "../domain/model.js";
 @Injectable()
 export class AgendaService {
   constructor(private readonly repo: AgendaRepository) {}
-  list() {
-    return this.repo.list();
+  list(user: Actor) {
+    return this.repo.list(user);
   }
-  async salvar(dto: AgendamentoDto, id?: string) {
+  async salvar(dto: AgendamentoDto, user: Actor, id?: string) {
+    if (
+      user.perfil === "PROFISSIONAL" ||
+      (user.perfil === "CLIENTE" && dto.clienteId !== user.clienteId)
+    )
+      throw new ForbiddenException("Você só pode agendar para seu cadastro");
     return this.executar(() =>
       this.repo.transaction(async (tx) => {
         const anterior = id
@@ -23,6 +30,16 @@ export class AgendaService {
           : null;
         if (id && !anterior)
           throw new NotFoundException("Agendamento não encontrado");
+        if (anterior) {
+          exigirDono(anterior, user);
+          if (
+            user.perfil === "CLIENTE" &&
+            ["CANCELADO", "CONCLUIDO"].includes(anterior.status)
+          )
+            throw new ForbiddenException(
+              "Atendimento encerrado não pode ser reagendado",
+            );
+        }
         const [cliente, p, s] = await Promise.all([
           tx.cliente.findUnique({ where: { id: dto.clienteId } }),
           tx.profissional.findUnique({
@@ -74,11 +91,27 @@ export class AgendaService {
       }),
     );
   }
-  async status(id: string, status: StatusAgendamento) {
+  async status(id: string, status: StatusAgendamento, user: Actor) {
     return this.executar(() =>
       this.repo.transaction(async (tx) => {
         const a = await tx.agendamento.findUnique({ where: { id } });
         if (!a) throw new NotFoundException("Agendamento não encontrado");
+        exigirDono(a, user);
+        if (
+          user.perfil === "CLIENTE" &&
+          (status !== "CANCELADO" || a.status === "CONCLUIDO")
+        )
+          throw new ForbiddenException(
+            "Cliente pode apenas cancelar seus atendimentos não concluídos",
+          );
+        if (
+          user.perfil === "PROFISSIONAL" &&
+          (!["CONFIRMADO", "CONCLUIDO"].includes(status) ||
+            ["CANCELADO", "CONCLUIDO"].includes(a.status))
+        )
+          throw new ForbiddenException(
+            "Profissional pode confirmar ou concluir seus atendimentos ativos",
+          );
         // Reativação reavalia disponibilidade e conflitos usando o intervalo histórico.
         if (a.status === "CANCELADO" && status !== "CANCELADO") {
           const p = await tx.profissional.findUniqueOrThrow({
@@ -108,6 +141,7 @@ export class AgendaService {
     profissionalId: string,
     servicoId: string,
     data: string,
+    user: Actor,
     ignorar?: string,
   ) {
     const dia = DateTime.fromISO(data, { zone: ZONE });
@@ -120,6 +154,13 @@ export class AgendaService {
       });
       const s = await tx.servico.findUnique({ where: { id: servicoId } });
       if (!p || !s) throw new NotFoundException();
+      if (ignorar) {
+        const atual = await tx.agendamento.findUnique({
+          where: { id: ignorar },
+        });
+        if (!atual) throw new NotFoundException();
+        exigirDono(atual, user);
+      }
       const ocupados = await tx.agendamento.findMany({
         where: { profissionalId },
       });

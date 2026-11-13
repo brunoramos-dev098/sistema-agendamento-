@@ -1,4 +1,6 @@
+import { Roles, AuthRequest } from "../auth/access.js";
 import {
+  Req,
   Module,
   Controller,
   Get,
@@ -15,8 +17,13 @@ import { DisponibilidadeDto } from "../common/dto.js";
 @Injectable()
 class Service {
   constructor(private readonly db: PrismaService) {}
-  list() {
-    return this.db.disponibilidade.findMany();
+  list(u: AuthRequest["user"]) {
+    return this.db.disponibilidade.findMany({
+      where:
+        u.perfil === "PROFISSIONAL"
+          ? { profissionalId: u.profissionalId! }
+          : {},
+    });
   }
   save(d: DisponibilidadeDto, id?: string) {
     if (d.inicioMinuto >= d.fimMinuto)
@@ -33,11 +40,14 @@ class Service {
     });
   }
 }
+@Roles("ADMINISTRADOR")
 @Controller()
 class ApiController {
   constructor(private readonly service: Service) {}
-  @Get("disponibilidades") list() {
-    return this.service.list();
+  @Roles("PROFISSIONAL", "ADMINISTRADOR")
+  @Get("disponibilidades")
+  list(@Req() r: AuthRequest) {
+    return this.service.list(r.user);
   }
   @Post("disponibilidades") create(@Body() dto: DisponibilidadeDto) {
     return this.service.save(dto);

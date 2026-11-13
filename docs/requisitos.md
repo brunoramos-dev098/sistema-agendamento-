@@ -63,3 +63,7 @@ As [entidades](entidades.md), [relações](relacoes.md) e a [arquitetura](arquit
 ## Expediente e blocos de atendimento
 
 Por solicitação de 13/11/2026, o padrão é segunda a sábado, 09:00–19:30, com serviços de 30 minutos e último início às 19:00, no horário de São Luís (MA). Novos profissionais recebem os seis períodos no cadastro. A jornada permite datas futuras, considera o intervalo integral e remove horários reservados. As regras RF01–RF11 e RN01–RN07 continuam aplicáveis; a confirmação transacional prevalece sobre a disponibilidade apresentada anteriormente na interface. Veja agenda-cliente.md.
+
+## Controle de acesso implementado
+
+O cadastro público cria apenas clientes. Cada cliente acessa e altera apenas seu cadastro e seus agendamentos; pode cancelar atendimentos não concluídos. Profissionais consultam a própria agenda/histórico e dados necessários de quem atendem, podendo confirmar/concluir os próprios atendimentos ativos. Administradores gerenciam cadastros, agenda, disponibilidade e criação de acessos. A API verifica perfil e propriedade, independentemente dos menus. Login, expiração, revogação e troca de senha estão definidos em acessos.md.

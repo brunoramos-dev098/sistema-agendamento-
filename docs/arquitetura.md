@@ -4,7 +4,7 @@ Monorepo npm: apps/web contém React + TypeScript strict + Vite; apps/api conté
 
 Controller recebe HTTP e DTO validado pelo ValidationPipe global (whitelist e rejeição de campos extras). Service aplica RN01–RN07. Repository coordena acesso Prisma. Domain contém classes de POO e a função pura de validação de intervalos. PrismaService é injetado por módulo global. Módulos separam clientes, profissionais, serviços, disponibilidades e agenda.
 
-Usuario abstrato é base de Cliente, Profissional e Administrador. Objetos de domínio e registros Prisma têm responsabilidades distintas; a validação pura do domínio é usada pelo serviço de agenda. Não existe autenticação ou permissão por perfil implementada.
+Usuario abstrato é base de Cliente, Profissional e Administrador. Objetos de domínio e registros Prisma têm responsabilidades distintas; a validação pura do domínio é usada pelo serviço de agenda. AuthModule fornece guard global, sessões PostgreSQL e autorização por perfil/dono. Conta e Sessao são separadas das classes de domínio; consulte acessos.md.
 
 Transações Serializable com até três tentativas em conflito de serialização validam referências, associação, disponibilidade e ocupação. A migration adiciona EXCLUDE USING gist sobre profissional e tstzrange(inicio,fim,'[)'), excetuando CANCELADO. Assim, requisições concorrentes não conseguem reservar intervalos sobrepostos, inclusive por outros clientes SQL. O fim fica congelado no agendamento: editar a duração de um serviço não altera atendimentos existentes.
 

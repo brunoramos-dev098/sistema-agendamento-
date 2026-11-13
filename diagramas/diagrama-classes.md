@@ -63,3 +63,32 @@ Usuario é uma **classe abstrata**; Cliente, Profissional e Administrador herdam
 `duracao` representa minutos. StatusAgendamento é um enum TypeScript. A linha pontilhada indica uso desse tipo, sem uma associação entre entidades. Coleções privadas retornam cópias e atributos são somente para leitura.
 
 Consulte [entidades](../docs/entidades.md), [dados](../docs/dados.md), [relações](../docs/relacoes.md) e [requisitos](../docs/requisitos.md).
+
+## Classes de suporte à autenticação
+
+```mermaid
+classDiagram
+ class Conta {
+  string id
+  string email
+  string senhaHash
+  Perfil perfil
+ }
+ class Sessao {
+  string tokenHash
+  Date expiraEm
+ }
+ class Perfil {
+  <<enumeration>>
+  CLIENTE
+  PROFISSIONAL
+  ADMINISTRADOR
+ }
+ Conta "1" -- "0..*" Sessao
+ Conta ..> Perfil
+ Conta "0..1" -- "0..1" Cliente
+ Conta "0..1" -- "0..1" Profissional
+ Conta "0..1" -- "0..1" Administrador
+```
+
+O CHECK do banco exige exatamente um dos três vínculos conforme o perfil. Conta não herda Usuario; representa credenciais e acesso. Veja acessos.md.

@@ -58,3 +58,29 @@ erDiagram
 ```
 
 Tipos SQL e nomes físicos exatos estão no schema Prisma. Tabela por classe concreta, FKs Restrict, relação N:N explícita e status enum. Veja [modelo](../database/modelo-dados.md).
+
+## Credenciais e sessões
+
+```mermaid
+erDiagram
+ CONTA {
+  uuid id PK
+  text email UK
+  text senhaHash
+  enum perfil
+  uuid clienteId FK,UK
+  uuid profissionalId FK,UK
+  uuid administradorId FK,UK
+ }
+ SESSAO {
+  char64 tokenHash PK
+  uuid contaId FK
+  timestamptz expiraEm
+ }
+ CONTA ||--o{ SESSAO : autentica
+ CLIENTES o|--o| CONTA : acesso
+ PROFISSIONAIS o|--o| CONTA : acesso
+ ADMINISTRADORES o|--o| CONTA : acesso
+```
+
+CHECK garante um único vínculo conforme o perfil. As tabelas concretas existentes permanecem preservadas.

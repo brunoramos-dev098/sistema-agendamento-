@@ -12,6 +12,7 @@ enum StatusAgendamento {
  CONCLUIDO
 }
 model Cliente {
+ conta Conta?
  id String @id @default(uuid()) @db.Uuid
  nome String
  telefone String
@@ -20,6 +21,7 @@ model Cliente {
  agendamentos Agendamento[]
 }
 model Profissional {
+ conta Conta?
  id String @id @default(uuid()) @db.Uuid
  nome String
  telefone String
@@ -30,6 +32,7 @@ model Profissional {
  agendamentos Agendamento[]
 }
 model Administrador {
+ conta Conta?
  id String @id @default(uuid()) @db.Uuid
  nome String
  telefone String
@@ -75,4 +78,31 @@ model Agendamento {
  servico Servico @relation(fields:[servicoId],references:[id],onDelete:Restrict)
  @@index([profissionalId,inicio])
  @@index([clienteId,inicio])
+}
+
+enum Perfil {
+ CLIENTE
+ PROFISSIONAL
+ ADMINISTRADOR
+}
+model Conta {
+ id String @id @default(uuid()) @db.Uuid
+ email String @unique
+ senhaHash String
+ perfil Perfil
+ clienteId String? @unique @db.Uuid
+ profissionalId String? @unique @db.Uuid
+ administradorId String? @unique @db.Uuid
+ cliente Cliente? @relation(fields:[clienteId],references:[id],onDelete:Restrict)
+ profissional Profissional? @relation(fields:[profissionalId],references:[id],onDelete:Restrict)
+ administrador Administrador? @relation(fields:[administradorId],references:[id],onDelete:Restrict)
+ sessoes Sessao[]
+}
+model Sessao {
+ tokenHash String @id @db.Char(64)
+ contaId String @db.Uuid
+ expiraEm DateTime @db.Timestamptz(3)
+ conta Conta @relation(fields:[contaId],references:[id],onDelete:Cascade)
+ @@index([contaId])
+ @@index([expiraEm])
 }

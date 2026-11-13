@@ -1,6 +1,7 @@
 import { NavLink, Routes, Route } from "react-router-dom";
 import { Cadastros } from "./pages/Cadastros";
-import { Agenda, Novo } from "./pages/Agenda";
+import { Agenda } from "./pages/Agenda";
+import { Novo } from "./pages/Novo";
 export default function App() {
   return (
     <div className="shell">
@@ -15,7 +16,7 @@ export default function App() {
             ["/clientes", "Clientes"],
             ["/profissionais", "Profissionais"],
             ["/servicos", "Serviços"],
-            ["/novo", "+ Novo agendamento"],
+            ["/novo", "Agendar atendimento"],
           ].map(([url, t]) => (
             <NavLink key={url} end to={url}>
               {t}

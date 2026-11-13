@@ -11,7 +11,10 @@ export const servico = z.object({
   nome: z.string().min(1),
   descricao: z.string(),
   preco: z.string().regex(/^\d{1,8}(\.\d{1,2})?$/),
-  duracao: z.coerce.number().int().min(1).max(1440),
+  duracao: z.coerce
+    .number()
+    .int()
+    .refine((v) => v === 30, "Cada atendimento dura 30 minutos"),
 });
 export function Formulario({
   tipo,
@@ -34,7 +37,10 @@ export function Formulario({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: zodResolver(schema), defaultValues: valor });
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: tipo === "servicos" ? { ...valor, duracao: 30 } : valor,
+  });
   const [mensagem, setMensagem] = useState("");
   const campos =
     tipo === "servicos"
@@ -60,7 +66,12 @@ export function Formulario({
         {campos.map((c) => (
           <label key={c}>
             {c}
-            <input {...register(c)} type={c === "email" ? "email" : "text"} />
+            <input
+              {...register(c)}
+              readOnly={c === "duracao"}
+              type={c === "email" ? "email" : "text"}
+            />
+            {c === "duracao" && <small>Atendimentos de 30 minutos.</small>}
             {errors[c] && <small>Confira este campo.</small>}
           </label>
         ))}

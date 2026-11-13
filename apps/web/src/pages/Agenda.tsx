@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLista } from "../hooks/useLista";
 import { api } from "../services/api";
 import { Atendimento, Registro } from "../types";
@@ -40,7 +40,7 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
           </section>
           <section>
             <p>Fuso do estabelecimento</p>
-            <strong className="timezone">Fortaleza · UTC−3</strong>
+            <strong className="timezone">São Luís (MA) · UTC−3</strong>
           </section>
         </div>
       )}
@@ -141,148 +141,6 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
           </div>
         )}
         <p role="status">{msg}</p>
-      </section>
-    </>
-  );
-}
-export function Novo() {
-  const clientes = useLista<Registro>("clientes");
-  const servicos = useLista<Registro>("servicos");
-  const profissionais = useLista<Registro>("profissionais");
-  const agenda = useLista<Atendimento>("agendamentos");
-  const id = new URLSearchParams(location.search).get("id");
-  const anterior = agenda.data?.find((a) => a.id === id);
-  const [c, setC] = useState("");
-  const [s, setS] = useState("");
-  const [p, setP] = useState("");
-  const [d, setD] = useState("");
-  const [h, setH] = useState("");
-  const [msg, setMsg] = useState("");
-  const [saving, setSaving] = useState(false);
-  const qc = useQueryClient();
-  const horarios = useQuery({
-    queryKey: ["horarios", p, s, d],
-    enabled: !!p && !!s && !!d,
-    queryFn: () =>
-      api<string[]>(
-        "agendamentos/horarios?" +
-          new URLSearchParams({ profissionalId: p, servicoId: s, data: d }),
-      ),
-  });
-  return (
-    <>
-      <h1>{id ? "Reagendar atendimento" : "Um novo atendimento"}</h1>
-      <p className="subtitle">Escolha o serviço e encontre o melhor horário.</p>
-      {anterior && (
-        <p>
-          Alterando: {anterior.cliente.nome}, {local(anterior.inicio)}.
-          Selecione os novos dados completos.
-        </p>
-      )}
-      <section>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setSaving(true);
-            try {
-              await api(
-                "agendamentos" + (id ? "/" + id : ""),
-                id ? "PUT" : "POST",
-                { clienteId: c, servicoId: s, profissionalId: p, inicio: h },
-              );
-              await qc.invalidateQueries();
-              setH("");
-              setMsg("Agendamento salvo com sucesso.");
-            } catch (e) {
-              setMsg((e as Error).message);
-            } finally {
-              setSaving(false);
-            }
-          }}
-        >
-          <div className="form-grid">
-            <label>
-              Cliente
-              <select required value={c} onChange={(e) => setC(e.target.value)}>
-                <option value="">Selecione</option>
-                {clientes.data?.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.nome}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Serviço
-              <select
-                required
-                value={s}
-                onChange={(e) => {
-                  setS(e.target.value);
-                  setP("");
-                  setH("");
-                }}
-              >
-                <option value="">Selecione</option>
-                {servicos.data?.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.nome} · {v.duracao} min
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Profissional
-              <select
-                required
-                value={p}
-                onChange={(e) => {
-                  setP(e.target.value);
-                  setH("");
-                }}
-              >
-                <option value="">Selecione</option>
-                {profissionais.data
-                  ?.filter((v) => v.servicos?.some((x) => x.servicoId === s))
-                  .map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.nome}
-                    </option>
-                  ))}
-              </select>
-            </label>
-            <label>
-              Data
-              <input
-                required
-                type="date"
-                value={d}
-                onChange={(e) => {
-                  setD(e.target.value);
-                  setH("");
-                }}
-              />
-            </label>
-          </div>
-          <label>
-            Horário em Fortaleza
-            <select required value={h} onChange={(e) => setH(e.target.value)}>
-              <option value="">Selecione um horário disponível</option>
-              {horarios.data?.map((v) => (
-                <option key={v} value={v}>
-                  {local(v)}
-                </option>
-              ))}
-            </select>
-          </label>
-          {horarios.isFetching && <p>Consultando horários…</p>}
-          {horarios.error && <p role="alert">{horarios.error.message}</p>}
-          {horarios.data?.length === 0 && (
-            <p>Sem horários disponíveis para esta seleção.</p>
-          )}
-          <button disabled={saving}>Confirmar agendamento</button>
-          <p role="status">{msg}</p>
-        </form>
       </section>
     </>
   );

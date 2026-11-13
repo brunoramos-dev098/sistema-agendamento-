@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLista } from "../hooks/useLista";
 import { api } from "../services/api";
-import { Registro } from "../types";
+import { Registro, Periodo } from "../types";
+import { diasSemana, hora } from "../services/disponibilidade";
 import { Formulario } from "../components/Formulario";
 export function Cadastros({ tipo }: { tipo: string }) {
+  const navigate = useNavigate();
   const lista = useLista<Registro>(tipo);
   const [edit, setEdit] = useState<Registro>();
   const qc = useQueryClient();
@@ -27,12 +30,16 @@ export function Cadastros({ tipo }: { tipo: string }) {
           tipo={tipo}
           valor={edit as unknown as Record<string, unknown>}
           onSave={async (d) => {
-            await api(
+            const salvo = await api<Registro>(
               tipo + (edit ? "/" + edit.id : ""),
               edit ? "PUT" : "POST",
               d,
             );
             await qc.invalidateQueries();
+            if (tipo === "clientes" && !edit) {
+              sessionStorage.setItem("checkapp.clienteId", salvo.id);
+              navigate("/novo");
+            }
             setEdit(undefined);
           }}
         />
@@ -66,6 +73,14 @@ export function Cadastros({ tipo }: { tipo: string }) {
                       <button className="secondary" onClick={() => setEdit(r)}>
                         Editar
                       </button>
+                      {tipo === "servicos" && (
+                        <a
+                          className="service-book-link"
+                          href={"/novo?servicoId=" + r.id}
+                        >
+                          Agendar este serviço →
+                        </a>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -83,6 +98,7 @@ function Vinculos() {
   const s = useLista<Registro>("servicos");
   const qc = useQueryClient();
   const [msg, setMsg] = useState("");
+  const [periodoEditado, setPeriodoEditado] = useState<Periodo>();
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const d = Object.fromEntries(new FormData(e.currentTarget));
@@ -93,22 +109,31 @@ function Vinculos() {
           "PUT",
         );
       else
-        await api("disponibilidades", "POST", {
-          profissionalId: d.profissionalId,
-          diaSemana: Number(d.diaSemana),
-          inicioMinuto: Number(d.inicioMinuto),
-          fimMinuto: Number(d.fimMinuto),
-        });
+        await api(
+          "disponibilidades" + (periodoEditado ? "/" + periodoEditado.id : ""),
+          periodoEditado ? "PUT" : "POST",
+          {
+            profissionalId: d.profissionalId,
+            diaSemana: Number(d.diaSemana),
+            inicioMinuto: String(d.horaInicio)
+              .split(":")
+              .reduce((h, v) => h * 60 + Number(v), 0),
+            fimMinuto: String(d.horaFim)
+              .split(":")
+              .reduce((h, v) => h * 60 + Number(v), 0),
+          },
+        );
       await qc.invalidateQueries();
       setMsg("Configuração salva");
+      if (!d.servicoId) setPeriodoEditado(undefined);
     } catch (e) {
       setMsg((e as Error).message);
     }
   }
-  const select = (
+  const select = (profissionalId = "") => (
     <label>
       Profissional
-      <select name="profissionalId" required>
+      <select name="profissionalId" defaultValue={profissionalId} required>
         <option value="">Selecione</option>
         {p.data?.map((r) => (
           <option key={r.id} value={r.id}>
@@ -119,10 +144,14 @@ function Vinculos() {
     </label>
   );
   return (
-    <section>
+    <section id="servicos-disponibilidade">
       <h2>Serviços e disponibilidade</h2>
+      <p>
+        Associe cada profissional aos serviços que ele realiza para poder
+        selecioná-lo em um novo agendamento.
+      </p>
       <form onSubmit={save}>
-        {select}
+        {select()}
         <label>
           Serviço
           <select name="servicoId" required>
@@ -136,52 +165,101 @@ function Vinculos() {
         </label>
         <button>Associar serviço</button>
       </form>
-      <form onSubmit={save}>
-        {select}
+      <ul>
+        {p.data?.map((profissional) => (
+          <li key={profissional.id}>
+            <strong>{profissional.nome}</strong>:{" "}
+            {profissional.servicos?.length
+              ? profissional.servicos
+                  .map(
+                    (v) =>
+                      s.data?.find((servico) => servico.id === v.servicoId)
+                        ?.nome ?? "Carregando serviço…",
+                  )
+                  .join(", ")
+              : "Nenhum serviço associado"}
+          </li>
+        ))}
+      </ul>
+      <h2>Disponibilidade semanal</h2>
+      <p>
+        Cadastre um período que comporte toda a duração do atendimento. Os
+        horários usam o horário de São Luís (MA).
+      </p>
+      <form key={periodoEditado?.id ?? "novo-periodo"} onSubmit={save}>
+        <h3>{periodoEditado ? "Editar período" : "Novo período"}</h3>
+        {select(periodoEditado?.profissionalId)}
         <label>
-          Dia da semana (1 segunda, 7 domingo)
-          <input name="diaSemana" type="number" min="1" max="7" required />
+          Dia da semana
+          <select
+            name="diaSemana"
+            defaultValue={periodoEditado?.diaSemana ?? ""}
+            required
+          >
+            <option value="">Selecione</option>
+            {diasSemana.map((dia, i) => (
+              <option key={dia} value={i + 1}>
+                {dia}
+              </option>
+            ))}
+          </select>
         </label>
         <label>
-          Início em minutos desde 00h
+          Horário inicial
           <input
-            name="inicioMinuto"
-            type="number"
-            min="0"
-            max="1439"
+            name="horaInicio"
+            defaultValue={
+              periodoEditado ? hora(periodoEditado.inicioMinuto) : ""
+            }
+            type="time"
+            step="60"
             required
           />
         </label>
         <label>
-          Fim em minutos desde 00h
-          <input name="fimMinuto" type="number" min="1" max="1440" required />
+          Horário final
+          <input
+            name="horaFim"
+            defaultValue={periodoEditado ? hora(periodoEditado.fimMinuto) : ""}
+            type="time"
+            step="60"
+            required
+          />
         </label>
-        <button>Registrar disponibilidade</button>
+        <button>
+          {periodoEditado
+            ? "Salvar disponibilidade"
+            : "Registrar disponibilidade"}
+        </button>
+        {periodoEditado && (
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => setPeriodoEditado(undefined)}
+          >
+            Cancelar edição
+          </button>
+        )}
       </form>
       <p role="status">{msg}</p>
       <p>Períodos cadastrados</p>
-      <Disponibilidades />
+      <Disponibilidades onEdit={setPeriodoEditado} />
     </section>
   );
 }
-function Disponibilidades() {
-  const q = useLista<{
-    id: string;
-    profissionalId: string;
-    diaSemana: number;
-    inicioMinuto: number;
-    fimMinuto: number;
-  }>("disponibilidades");
+function Disponibilidades({ onEdit }: { onEdit: (periodo: Periodo) => void }) {
+  const q = useLista<Periodo>("disponibilidades");
   const p = useLista<Registro>("profissionais");
   return (
     <ul>
       {q.data?.map((d) => (
         <li key={d.id}>
-          {p.data?.find((v) => v.id === d.profissionalId)?.nome} · dia{" "}
-          {d.diaSemana} · {Math.floor(d.inicioMinuto / 60)}:
-          {String(d.inicioMinuto % 60).padStart(2, "0")} –{" "}
-          {Math.floor(d.fimMinuto / 60)}:
-          {String(d.fimMinuto % 60).padStart(2, "0")}
+          {p.data?.find((v) => v.id === d.profissionalId)?.nome} ·{" "}
+          {diasSemana[d.diaSemana - 1]} · {hora(d.inicioMinuto)}–
+          {hora(d.fimMinuto)}{" "}
+          <button type="button" className="secondary" onClick={() => onEdit(d)}>
+            Editar período
+          </button>
         </li>
       ))}
     </ul>

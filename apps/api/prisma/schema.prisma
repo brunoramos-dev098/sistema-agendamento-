@@ -1,0 +1,78 @@
+generator client {
+ provider = "prisma-client"
+ output = "../src/generated/prisma"
+}
+datasource db {
+ provider = "postgresql"
+}
+enum StatusAgendamento {
+ AGENDADO
+ CONFIRMADO
+ CANCELADO
+ CONCLUIDO
+}
+model Cliente {
+ id String @id @default(uuid()) @db.Uuid
+ nome String
+ telefone String
+ email String @unique
+ 
+ agendamentos Agendamento[]
+}
+model Profissional {
+ id String @id @default(uuid()) @db.Uuid
+ nome String
+ telefone String
+ email String @unique
+ especialidade String
+ servicos ProfissionalServico[]
+ disponibilidades Disponibilidade[]
+ agendamentos Agendamento[]
+}
+model Administrador {
+ id String @id @default(uuid()) @db.Uuid
+ nome String
+ telefone String
+ email String @unique
+ 
+ 
+}
+model Servico {
+ id String @id @default(uuid()) @db.Uuid
+ nome String
+ descricao String
+ preco Decimal @db.Decimal(10,2)
+ duracao Int
+ profissionais ProfissionalServico[]
+ agendamentos Agendamento[]
+}
+model ProfissionalServico {
+ profissionalId String @db.Uuid
+ servicoId String @db.Uuid
+ profissional Profissional @relation(fields:[profissionalId],references:[id],onDelete:Restrict)
+ servico Servico @relation(fields:[servicoId],references:[id],onDelete:Restrict)
+ @@id([profissionalId,servicoId])
+}
+model Disponibilidade {
+ id String @id @default(uuid()) @db.Uuid
+ diaSemana Int
+ inicioMinuto Int
+ fimMinuto Int
+ profissionalId String @db.Uuid
+ profissional Profissional @relation(fields:[profissionalId],references:[id],onDelete:Restrict)
+ @@index([profissionalId,diaSemana])
+}
+model Agendamento {
+ id String @id @default(uuid()) @db.Uuid
+ inicio DateTime @db.Timestamptz(3)
+ fim DateTime @db.Timestamptz(3)
+ status StatusAgendamento @default(AGENDADO)
+ clienteId String @db.Uuid
+ profissionalId String @db.Uuid
+ servicoId String @db.Uuid
+ cliente Cliente @relation(fields:[clienteId],references:[id],onDelete:Restrict)
+ profissional Profissional @relation(fields:[profissionalId],references:[id],onDelete:Restrict)
+ servico Servico @relation(fields:[servicoId],references:[id],onDelete:Restrict)
+ @@index([profissionalId,inicio])
+ @@index([clienteId,inicio])
+}

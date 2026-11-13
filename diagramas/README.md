@@ -1,9 +1,7 @@
-# Diagramas do projeto
+# Diagramas Checkapp
 
-Esta pasta reúne os diagramas iniciais da primeira entrega de **30/09/2026**, escritos em Mermaid para renderização no GitHub:
+- [Classes TypeScript](diagrama-classes.md): herança, encapsulamento e associações.
+- [Arquitetura web](diagrama-arquitetura.md): React, API NestJS e PostgreSQL.
+- [Entidade-relacionamento](diagrama-entidade-relacionamento.md): tabelas concretas e N:N explícita.
 
-- [Diagrama de Classes](diagrama-classes.md): herança, atributos e associações do modelo de POO.
-- [Diagrama de Arquitetura](diagrama-arquitetura.md): camadas da aplicação e uso do modelo de domínio.
-- [Diagrama Entidade-Relacionamento](diagrama-entidade-relacionamento.md): tabelas conceituais, chaves e relações previstas para persistência.
-
-Os diagramas serão atualizados conforme a imersão e a validação dos requisitos. Suas descrições estão em [arquitetura](../docs/arquitetura.md), [entidades](../docs/entidades.md), [relações](../docs/relacoes.md) e [modelo de dados](../database/modelo-dados.md). Outros diagramas poderão ser adicionados quando necessários.
+Mermaid renderiza no GitHub. Fonte física definitiva: schema Prisma e migrations. [Histórico da migração](../docs/migracao.md).

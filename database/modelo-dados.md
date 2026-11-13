@@ -1,83 +1,11 @@
-# Modelo de dados previsto
+# PostgreSQL e Prisma ORM 7
 
-O sistema utilizará MySQL para armazenar os dados. Este documento descreve o modelo conceitual de persistência; o esquema físico e os scripts SQL serão elaborados na implementação.
+Fonte do esquema: apps/api/prisma/schema.prisma. Migrations em apps/api/prisma/migrations. PrismaPg usa DATABASE_URL, CLI usa DIRECT_DATABASE_URL com fallback. Não executar migração em banco remoto sem revisão e backup.
 
-## Possíveis tabelas futuras
+Tabela por classe concreta para herança: Cliente, Profissional e Administrador têm atributos comuns persistidos, enquanto TypeScript os herda de Usuario sem duplicação. Não existe tabela Usuario.
 
-```text
-clientes
-profissionais
-administradores
-servicos
-disponibilidades
-agendamentos
-profissionais_servicos
-```
+UUIDs identificam registros; emails são únicos dentro de cada tabela concreta. Servico guarda numeric(10,2), duração inteira positiva. Disponibilidade pertence a Profissional, contém dia 1–7 e minutos locais 0–1440. ProfissionalServico tem PK composta (profissionalId, servicoId), resolve N:N e evita duplicação. Agendamento tem FKs obrigatórias para Cliente, Profissional e Servico, status enum, inicio e fim timestamptz, índice por profissional/início e cliente/início. FKs Restrict preservam histórico.
 
-| Tabela prevista | Chave primária sugerida | Informações principais |
-|---|---|---|
-| clientes | id | nome, telefone, email |
-| profissionais | id | nome, telefone, email, especialidade |
-| administradores | id | nome, telefone, email |
-| servicos | id | nome, descricao, preco, duracao |
-| disponibilidades | id | dia_semana, hora_inicio, hora_fim, profissional_id |
-| agendamentos | id | data, horario, status e referências às demais tabelas |
-| profissionais_servicos | (profissional_id, servico_id) | Associação entre profissional e serviço |
+Migration complementa Prisma com CHECKs e extensão btree_gist. Restrição EXCLUDE combina profissionalId e tstzrange(inicio,fim,'[)') para todos os status exceto CANCELADO. Requisições simultâneas que disputam o mesmo intervalo não podem ambas confirmar. Prisma não expressa essa restrição; não substituir migrations por db push. Preço e duração do catálogo não modificam intervalos históricos.
 
-Usuario é uma **classe abstrata no modelo orientado a objetos**, herdada por Cliente, Profissional e Administrador. A estratégia de persistência da herança ainda será definida. A lista acima é uma visão conceitual dos dados previstos, não uma escolha definitiva de mapeamento; não pressupõe uma tabela `usuarios`. Os atributos comuns são apresentados nas tabelas conceituais para indicar quais informações precisam ser armazenadas, sem duplicá-los nas subclasses do modelo de classes.
-
-## Chaves estrangeiras previstas
-
-### agendamentos
-
-```text
-agendamentos
-- id
-- data
-- horario
-- status
-- cliente_id
-- profissional_id
-- servico_id
-```
-
-| Campo em agendamentos | Referência prevista | Significado |
-|---|---|---|
-| cliente_id | clientes.id | Cliente do agendamento |
-| profissional_id | profissionais.id | Profissional responsável |
-| servico_id | servicos.id | Serviço agendado |
-
-Cada agendamento deverá estar associado a exatamente um registro de cada uma dessas tabelas. Um cliente, profissional ou serviço poderá estar associado a zero ou mais agendamentos.
-
-`id` é a chave primária sugerida. `status` representa `AGENDADO`, `CONFIRMADO`, `CANCELADO` ou `CONCLUIDO`, conforme StatusAgendamento. O formato de armazenamento será definido posteriormente. Cancelamentos preservam o registro, mas liberam o intervalo para outros agendamentos (RN07).
-
-### disponibilidades
-
-```text
-disponibilidades
-- id
-- dia_semana
-- hora_inicio
-- hora_fim
-- profissional_id
-```
-
-`id` é a chave primária sugerida e `profissional_id` é uma chave estrangeira para `profissionais.id`. Cada período pertence a exatamente um profissional; um profissional pode possuir zero ou mais períodos. `dia_semana` corresponde a `diaSemana` no modelo Java, e os horários correspondem a `horaInicio` e `horaFim`.
-
-### profissionais_servicos
-
-```text
-profissionais_servicos
-- profissional_id
-- servico_id
-```
-
-`profissional_id` referencia `profissionais.id`, e `servico_id` referencia `servicos.id`. O par é a chave primária composta sugerida, evitando repetir a mesma associação. Cada registro vincula exatamente um profissional a exatamente um serviço; cada profissional e serviço pode aparecer em zero ou mais registros dessa tabela.
-
-Essa tabela resolve conceitualmente a relação **N:N** e permite registrar os serviços que um profissional pode realizar antes de existir um agendamento. O par selecionado no agendamento deve existir nessa associação (RN03). A forma de garantir essa regra na implementação e na persistência será definida posteriormente.
-
-## Relação com as demais visões
-
-Os atributos e tipos Java sugeridos estão em [dados](../docs/dados.md), e as cardinalidades em [relações](../docs/relacoes.md). O [diagrama entidade-relacionamento](../diagramas/diagrama-entidade-relacionamento.md) representa as tabelas conceituais e chaves descritas aqui.
-
-Os tipos usados no diagrama são descritivos. Sua correspondência com os tipos SQL do MySQL e o mecanismo de acesso aos dados serão definidos na implementação.
+PostgreSQL local e Supabase são alternativas. Em Supabase usar URL de conexão PostgreSQL no backend e conexão direta para migrations, mantendo TLS validado. Extensão btree_gist precisa estar disponível e autorizada. Não usar chaves Supabase nem DATABASE_URL no Vite. Nenhum banco remoto foi alterado durante esta migração.

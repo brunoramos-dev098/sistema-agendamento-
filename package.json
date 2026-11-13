@@ -1,0 +1,29 @@
+{
+  "name": "checkapp",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "eslint apps --ignore-pattern \"**/generated/**\"",
+    "format": "prettier --write apps docs diagramas README.md",
+    "db:generate": "npm run db:generate -w apps/api",
+    "db:validate": "npm run db:validate -w apps/api",
+    "db:migrate": "npm run db:migrate -w apps/api"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "eslint": "^10.0.0",
+    "typescript-eslint": "^8.0.0",
+    "prettier": "^3.6.2",
+    "concurrently": "^9.2.1",
+    "@types/node": "^24.10.0"
+  }
+}

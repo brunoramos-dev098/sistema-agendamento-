@@ -1,6 +1,4 @@
-# Diagrama Entidade-Relacionamento
-
-Modelo conceitual dos dados que serão armazenados em MySQL. Os tipos abaixo são descritivos; o esquema físico e os scripts SQL serão elaborados na implementação.
+# Modelo PostgreSQL
 
 ```mermaid
 erDiagram
@@ -33,8 +31,8 @@ erDiagram
     DISPONIBILIDADES {
         identificador id PK
         dia_da_semana dia_semana
-        hora hora_inicio
-        hora hora_fim
+        integer inicio_minuto
+        integer fim_minuto
         identificador profissional_id FK
     }
     AGENDAMENTOS {
@@ -59,12 +57,4 @@ erDiagram
     SERVICOS ||--o{ PROFISSIONAIS_SERVICOS : vincula
 ```
 
-`||` indica exatamente um e `o{` indica zero ou muitos. Cada agendamento referencia exatamente um cliente, profissional e serviço. Cada disponibilidade pertence a exatamente um profissional.
-
-A relação N:N entre profissionais e serviços é resolvida por PROFISSIONAIS_SERVICOS. Cada linha da associação tem duas chaves estrangeiras, que juntas formam a chave primária composta sugerida. O par profissional/serviço do agendamento deve existir nessa associação (RN03); as linhas do diagrama, isoladamente, não expressam essa validação.
-
-ADMINISTRADORES aparece sem associação própria porque não foi definida uma relação persistente específica para esse perfil. Gerenciar informações é uma responsabilidade, não uma chave estrangeira adicional.
-
-Usuario é uma classe abstrata do modelo de objetos. A estratégia de persistência da herança permanece a definir; apresentar os dados comuns nas tabelas conceituais não fixa uma estratégia nem exige uma tabela `usuarios`.
-
-`duracao` representa minutos, e `status` corresponde a `AGENDADO`, `CONFIRMADO`, `CANCELADO` ou `CONCLUIDO`. Consulte [modelo de dados](../database/modelo-dados.md), [relações](../docs/relacoes.md) e [requisitos](../docs/requisitos.md).
+Tipos SQL e nomes físicos exatos estão no schema Prisma. Tabela por classe concreta, FKs Restrict, relação N:N explícita e status enum. Veja [modelo](../database/modelo-dados.md).

@@ -3,6 +3,7 @@ config({ path: "../../.env" });
 import { PrismaClient } from "../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hashPassword } from "./password.js";
+import { isEmail } from "class-validator";
 import { randomBytes } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
@@ -19,6 +20,10 @@ try {
     const senha =
       process.env.CHECKAPP_ADMIN_PASSWORD ??
       randomBytes(24).toString("base64url");
+    if (!isEmail(email) || senha.length < 12 || senha.length > 128)
+      throw new Error(
+        "Configure um email válido e senha entre 12 e 128 caracteres.",
+      );
     const senhaHash = await hashPassword(senha);
     await db.$transaction(async (tx) => {
       const pessoa = await tx.administrador.upsert({

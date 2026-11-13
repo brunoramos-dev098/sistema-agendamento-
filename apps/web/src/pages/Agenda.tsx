@@ -1,3 +1,4 @@
+import { useAuth } from "../auth/Auth";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLista } from "../hooks/useLista";
@@ -5,7 +6,16 @@ import { api } from "../services/api";
 import { Atendimento, Registro } from "../types";
 export const local = (s: string) =>
   new Date(s).toLocaleString("pt-BR", { timeZone: "America/Fortaleza" });
-export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
+export function Agenda({
+  dashboard = false,
+  history = false,
+}: {
+  dashboard?: boolean;
+  history?: boolean;
+}) {
+  const { user } = useAuth();
+  const admin = user?.perfil === "ADMINISTRADOR";
+  const cliente = user?.perfil === "CLIENTE";
   const q = useLista<Atendimento>("agendamentos");
   const prof = useLista<Registro>("profissionais");
   const qc = useQueryClient();
@@ -14,6 +24,7 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
   const [msg, setMsg] = useState("");
   const rows = q.data?.filter(
     (a) =>
+      (!history || ["CANCELADO", "CONCLUIDO"].includes(a.status)) &&
       (!p || a.profissional.id === p) &&
       (!data ||
         new Intl.DateTimeFormat("en-CA", {
@@ -24,7 +35,19 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
   );
   return (
     <>
-      <h1>{dashboard ? "Sua agenda, em dia." : "Agenda e histórico"}</h1>
+      <h1>
+        {history
+          ? "Meu histórico"
+          : dashboard
+            ? admin
+              ? "Visão geral do estabelecimento"
+              : cliente
+                ? "Seu painel de cliente"
+                : "Seu painel profissional"
+            : admin
+              ? "Agenda e histórico"
+              : "Meus atendimentos"}
+      </h1>
       <p className="subtitle">
         Um espaço para cuidar do seu tempo e de quem conta com você.
       </p>
@@ -35,8 +58,15 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
             <strong>{rows?.length ?? "—"}</strong>
           </section>
           <section>
-            <p>Profissionais cadastrados</p>
-            <strong>{prof.data?.length ?? "—"}</strong>
+            <p>
+              {admin ? "Profissionais cadastrados" : "Atendimentos concluídos"}
+            </p>
+            <strong>
+              {admin
+                ? (prof.data?.length ?? "—")
+                : (q.data?.filter((a) => a.status === "CONCLUIDO").length ??
+                  "—")}
+            </strong>
           </section>
           <section>
             <p>Fuso do estabelecimento</p>
@@ -47,7 +77,9 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
       <section>
         <div className="section-head">
           <h2>{dashboard ? "O que vem a seguir" : "Todos os atendimentos"}</h2>
-          <a href="/novo">+ Novo agendamento</a>
+          {user?.perfil !== "PROFISSIONAL" && (
+            <a href="/novo">+ Novo agendamento</a>
+          )}
         </div>
         {!dashboard && (
           <div className="form-grid">
@@ -59,17 +91,19 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
                 onChange={(e) => setData(e.target.value)}
               />
             </label>
-            <label>
-              Profissional
-              <select value={p} onChange={(e) => setP(e.target.value)}>
-                <option value="">Todos</option>
-                {prof.data?.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.nome}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {admin && (
+              <label>
+                Profissional
+                <select value={p} onChange={(e) => setP(e.target.value)}>
+                  <option value="">Todos</option>
+                  {prof.data?.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.nome}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
           </div>
         )}
         {q.isPending ? (
@@ -79,7 +113,11 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
         ) : !rows?.length ? (
           <div className="empty">
             Sua agenda tem espaço para novas histórias.
-            <p>Cadastre clientes, profissionais e serviços para começar.</p>
+            <p>
+              {admin
+                ? "Cadastre clientes, profissionais e serviços para começar."
+                : "Seus atendimentos aparecerão aqui."}
+            </p>
           </div>
         ) : (
           <div className="table-wrap">
@@ -100,6 +138,9 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
                     <td>
                       {a.cliente.nome}
                       <small>{a.servico.nome}</small>
+                      {user?.perfil === "PROFISSIONAL" && (
+                        <small>{a.cliente.telefone}</small>
+                      )}
                     </td>
                     <td>{a.profissional.nome}</td>
                     <td>
@@ -124,15 +165,32 @@ export function Agenda({ dashboard = false }: { dashboard?: boolean }) {
                         }}
                       >
                         {[
-                          "AGENDADO",
-                          "CONFIRMADO",
-                          "CANCELADO",
-                          "CONCLUIDO",
+                          ...new Set([
+                            a.status,
+                            ...(admin
+                              ? [
+                                  "AGENDADO",
+                                  "CONFIRMADO",
+                                  "CANCELADO",
+                                  "CONCLUIDO",
+                                ]
+                              : cliente
+                                ? a.status !== "CONCLUIDO"
+                                  ? ["CANCELADO"]
+                                  : []
+                                : ["AGENDADO", "CONFIRMADO"].includes(a.status)
+                                  ? ["CONFIRMADO", "CONCLUIDO"]
+                                  : []),
+                          ]),
                         ].map((s) => (
                           <option key={s}>{s}</option>
                         ))}
                       </select>
-                      <a href={"/novo?id=" + a.id}>Reagendar</a>
+                      {user?.perfil !== "PROFISSIONAL" &&
+                        (admin ||
+                          !["CANCELADO", "CONCLUIDO"].includes(a.status)) && (
+                          <a href={"/novo?id=" + a.id}>Reagendar</a>
+                        )}
                     </td>
                   </tr>
                 ))}

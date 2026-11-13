@@ -36,7 +36,7 @@ if (-not (Test-LocalPort 5173)) {
 }
 $ready = $false
 for ($i=0; $i -lt 40; $i++) {
-  try { $api = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:5173/api/clientes' -TimeoutSec 2; if ($api.StatusCode -eq 200) { $ready=$true; break } } catch { Start-Sleep -Milliseconds 250 }
+  try { $api = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:5173/api/auth/health' -TimeoutSec 2; if ($api.StatusCode -eq 200) { $ready=$true; break } } catch { Start-Sleep -Milliseconds 250 }
 }
 if (-not $ready) { throw 'API indisponível. Consulte .tools/api-error.log e .tools/web-server-error.log.' }
 Write-Host 'Checkapp disponível em http://127.0.0.1:5173/novo'

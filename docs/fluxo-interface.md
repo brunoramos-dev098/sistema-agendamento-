@@ -18,3 +18,7 @@ A disponibilidade permite cadastro e edição de períodos semanais. A tela de n
 ## Jornada simplificada
 
 A tela /novo reúne cadastro do cliente, cartões de serviços e profissionais, calendário por dias e botões para cada horário livre. Permite datas futuras, reserva com resumo e atualização automática da ocupação a cada cinco segundos. Padrão: segunda a sábado, 09:00–19:30, duração de 30 minutos. Veja [regras e fluxo](agenda-cliente.md).
+
+## Painéis por perfil
+
+Login abre o painel conforme o perfil autenticado. Cliente: agendar, próprios agendamentos/histórico, catálogo e Meu cadastro. Profissional: própria agenda/histórico, serviços/disponibilidade e Meu cadastro. Administrador: visão geral, agenda completa, cadastros, disponibilidade e Contas e acessos. Rotas restritas redirecionam ao painel; a API também restringe consultas e alterações, sem depender dos menus. Veja acessos.md.

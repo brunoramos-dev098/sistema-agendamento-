@@ -4,4 +4,4 @@ Base main: 149a7e87da783cab2cb6a93a1794f8486d9ebd7a. Domínio Java inspecionado 
 
 Preservados: sete classes e enum, herança, referências obrigatórias, associação bidirecional com coleções protegidas, RF01–RF11 e RN01–RN07. Prisma adota tabelas concretas, UUIDs e fins históricos; disponibilidade usa minutos locais e dia ISO.
 
-Pendências antes de exposição pública: autenticação e autorização a definir com a equipe, transições de status a validar em imersão, paginação e filtros server-side, UX de edição de disponibilidade/vínculos, auditoria e testes de navegação completos. Cadastros não possuem exclusão física. Consulte verificacao.md para resultados efetivamente executados.
+Pendências antes de exposição pública: recuperação de senha por email e auditoria, transições de status a validar em imersão, paginação e filtros server-side, UX de edição de disponibilidade/vínculos, auditoria e testes de navegação completos. Cadastros não possuem exclusão física. Consulte verificacao.md para resultados efetivamente executados.

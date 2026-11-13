@@ -17,3 +17,7 @@ Horários recorrentes usam America/Fortaleza. Instantes de atendimentos são arm
 Dinheiro nunca é calculado com ponto flutuante: classe Servico usa string decimal validada e Prisma usa Decimal. Duração está em minutos. Telefone permanece texto.
 
 Status tem exatamente AGENDADO, CONFIRMADO, CANCELADO e CONCLUIDO. Cancelamento mantém o registro e libera ocupação. Fim histórico permanece fixo após alterações no catálogo.
+
+## Horário de São Luís (MA)
+
+A interface usa o nome São Luís (MA). O identificador técnico America/Fortaleza também cobre o Maranhão, conforme a tabela IANA: https://raw.githubusercontent.com/eggert/tz/main/zone1970.tab. Mantê-lo preserva a interpretação dos horários e dos registros existentes. A lista de horários depende da disponibilidade do profissional no dia da semana selecionado, da duração integral do serviço e das reservas existentes.

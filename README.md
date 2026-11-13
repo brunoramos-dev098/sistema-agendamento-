@@ -50,7 +50,7 @@ Teste concorrente real exige banco de teste migrado e TEST_DATABASE_URL. Ele cri
 
 ## Situação da implementação
 
-Base funcional com cadastros e edição, associação profissional/serviço, disponibilidade semanal, consulta de horários, criação e alteração de agendamentos, status, cancelamento e histórico. Interface inclui dashboard, clientes, profissionais, serviços, agenda com filtros e formulário de agendamento. Slots em passos de 15 minutos; API valida intervalo completo. Cancelamentos não apagam registros. Reagendamento via API ignora o próprio ID. Autenticação e autorização não foram definidas: executar localmente, sem exposição pública até implementá-las.
+Base funcional com cadastros e edição, associação profissional/serviço, disponibilidade semanal, consulta de horários, criação e alteração de agendamentos, status, cancelamento e histórico. Interface inclui dashboard, clientes, profissionais, serviços, agenda com filtros e formulário de agendamento. Slots em passos de 30 minutos; API valida intervalo completo. Cancelamentos não apagam registros. Reagendamento via API ignora o próprio ID. Autenticação e autorização não foram definidas: executar localmente, sem exposição pública até implementá-las.
 
 Pendências: validar imersão, permissões e transições com usuários; aprimorar edição de disponibilidade e vínculos na interface, paginação, auditoria e testes completos de navegação. Integrações de concorrência e HTTP foram aprovadas na CI com PostgreSQL 17; reprodução local exige banco de teste. Consulte [migração e histórico](docs/migracao.md).
 
@@ -73,3 +73,7 @@ Pendências: validar imersão, permissões e transições com usuários; aprimor
 | Luciano Henrique        | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end  |
 | Thyago Baima            | [Thyago098](https://github.com/Thyago098)                         | DevOps    |
 | Carlos Eduardo Sá Costa | [carloseduardo-Eng](https://github.com/carloseduardo-Eng)         | Front-end |
+
+## Agendamento simplificado
+
+Acesse /novo para cadastrar-se ou selecionar um cliente, escolher serviço e profissional por cartões, navegar no calendário e reservar um bloco de 30 minutos. Padrão dos profissionais: segunda a sábado, 09:00–19:30 (último início 19:00), em São Luís (MA). Horários ocupados saem da lista, atualizada a cada cinco segundos. Veja [jornada do cliente](docs/agenda-cliente.md).

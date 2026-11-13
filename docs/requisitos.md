@@ -59,3 +59,7 @@ React, TypeScript, Vite e Tailwind CSS compõem a interface. NestJS implementa a
 | RF10–RF11  | Agendamento e StatusAgendamento, preservando os registros |
 
 As [entidades](entidades.md), [relações](relacoes.md) e a [arquitetura](arquitetura.md) descrevem a organização prevista para atender a esses requisitos.
+
+## Expediente e blocos de atendimento
+
+Por solicitação de 13/11/2026, o padrão é segunda a sábado, 09:00–19:30, com serviços de 30 minutos e último início às 19:00, no horário de São Luís (MA). Novos profissionais recebem os seis períodos no cadastro. A jornada permite datas futuras, considera o intervalo integral e remove horários reservados. As regras RF01–RF11 e RN01–RN07 continuam aplicáveis; a confirmação transacional prevalece sobre a disponibilidade apresentada anteriormente na interface. Veja agenda-cliente.md.

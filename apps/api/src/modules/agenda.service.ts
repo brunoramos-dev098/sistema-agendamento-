@@ -36,6 +36,15 @@ export class AgendaService {
             "Cliente, profissional e serviço são obrigatórios e devem existir",
           );
         const inicio = new Date(dto.inicio);
+        const local = DateTime.fromJSDate(inicio, { zone: ZONE });
+        if (
+          local.minute % 30 !== 0 ||
+          local.second !== 0 ||
+          local.millisecond !== 0
+        )
+          throw new BadRequestException(
+            "Escolha um horário em blocos de 30 minutos, como 09:00 ou 09:30",
+          );
         const ocupados = await tx.agendamento.findMany({
           where: { profissionalId: p.id },
         });
@@ -95,7 +104,12 @@ export class AgendaService {
       }),
     );
   }
-  async horarios(profissionalId: string, servicoId: string, data: string) {
+  async horarios(
+    profissionalId: string,
+    servicoId: string,
+    data: string,
+    ignorar?: string,
+  ) {
     const dia = DateTime.fromISO(data, { zone: ZONE });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(data) || !dia.isValid)
       throw new BadRequestException("Data inválida");
@@ -110,7 +124,7 @@ export class AgendaService {
         where: { profissionalId },
       });
       const result: string[] = [];
-      for (let m = 0; m < 1440; m += 15) {
+      for (let m = 0; m < 1440; m += 30) {
         const inicio = dia.startOf("day").plus({ minutes: m }).toJSDate();
         try {
           validarAgenda(
@@ -119,6 +133,7 @@ export class AgendaService {
             p.servicos.some((v) => v.servicoId === s.id),
             p.disponibilidades,
             ocupados,
+            ignorar,
           );
           result.push(inicio.toISOString());
         } catch {

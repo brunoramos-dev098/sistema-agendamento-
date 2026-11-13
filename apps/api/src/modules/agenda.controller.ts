@@ -23,10 +23,11 @@ export class AgendaController {
     @Query("profissionalId") p: string,
     @Query("servicoId") s: string,
     @Query("data") d: string,
+    @Query("ignorar") ignorar?: string,
   ) {
-    if (!isUUID(p) || !isUUID(s))
+    if (!isUUID(p) || !isUUID(s) || (ignorar !== undefined && !isUUID(ignorar)))
       throw new BadRequestException("Identificadores inválidos");
-    return this.service.horarios(p, s, d);
+    return this.service.horarios(p, s, d, ignorar);
   }
   @Post() criar(@Body() dto: AgendamentoDto) {
     return this.service.salvar(dto);

@@ -22,7 +22,18 @@ class Repository {
   save(data: ProfissionalDto, id?: string) {
     return id
       ? this.db.profissional.update({ where: { id }, data })
-      : this.db.profissional.create({ data });
+      : this.db.profissional.create({
+          data: {
+            ...data,
+            disponibilidades: {
+              create: Array.from({ length: 6 }, (_, i) => ({
+                diaSemana: i + 1,
+                inicioMinuto: 540,
+                fimMinuto: 1170,
+              })),
+            },
+          },
+        });
   }
 }
 @Injectable()

@@ -1,4 +1,5 @@
 import {
+  Equals,
   IsString,
   IsEmail,
   IsNotEmpty,
@@ -23,7 +24,9 @@ export class ServicoDto {
   @IsString() @IsNotEmpty() nome!: string;
   @IsString() descricao!: string;
   @Matches(/^\d{1,8}(\.\d{1,2})?$/) preco!: string;
-  @IsInt() @Min(1) @Max(1440) duracao!: number;
+  @IsInt()
+  @Equals(30, { message: "Cada atendimento deve durar 30 minutos" })
+  duracao!: number;
 }
 export class DisponibilidadeDto {
   @IsUUID() profissionalId!: string;

@@ -53,13 +53,75 @@ it.skipIf(!process.env.TEST_DATABASE_URL)(
           nome: "Teste",
           descricao: "Integração",
           preco: "50.00",
-          duracao: 60,
+          duracao: 30,
         })
       ).json();
       expect(
         (await request("profissionais/" + p.id + "/servicos/" + s.id, "PUT"))
           .ok,
       ).toBe(true);
+      const profissionais = await (await request("profissionais")).json();
+      const cadastrado = profissionais.find(
+        (v: { id: string }) => v.id === p.id,
+      );
+      expect(cadastrado.disponibilidades).toHaveLength(6);
+      expect(
+        cadastrado.disponibilidades.every(
+          (v: { inicioMinuto: number; fimMinuto: number }) =>
+            v.inicioMinuto === 540 && v.fimMinuto === 1170,
+        ),
+      ).toBe(true);
+      const consultar = async (data: string): Promise<string[]> =>
+        (
+          await request(
+            "agendamentos/horarios?" +
+              new URLSearchParams({
+                profissionalId: p.id,
+                servicoId: s.id,
+                data,
+              }),
+          )
+        ).json();
+      const quinta = "2030-01-10";
+      const livres = await consultar(quinta);
+      expect(livres).toHaveLength(21);
+      expect(livres[0]).toBe(quinta + "T12:00:00.000Z");
+      expect(livres.at(-1)).toBe(quinta + "T22:00:00.000Z");
+      const cliente2 = await (
+        await request("clientes", "POST", {
+          ...pessoa,
+          email: "outro-" + suffix + "@test.local",
+        })
+      ).json();
+      const reservar = (inicio: string, clienteId = c.id) =>
+        request("agendamentos", "POST", {
+          clienteId,
+          profissionalId: p.id,
+          servicoId: s.id,
+          inicio,
+        });
+      const primeira = await reservar(quinta + "T12:00:00Z");
+      expect(primeira.status).toBe(201);
+      expect((await reservar(quinta + "T12:30:00Z", cliente2.id)).status).toBe(
+        201,
+      );
+      expect((await consultar(quinta))[0]).toBe(quinta + "T13:00:00.000Z");
+      const concorrentes = await Promise.all([
+        reservar(quinta + "T15:00:00Z"),
+        reservar(quinta + "T15:00:00Z", cliente2.id),
+      ]);
+      expect(concorrentes.filter((r) => r.status === 201)).toHaveLength(1);
+      expect(
+        concorrentes.filter((r) => r.status === 400 || r.status === 409),
+      ).toHaveLength(1);
+      expect(await consultar(quinta)).not.toContain(quinta + "T15:00:00.000Z");
+      const primeiraId = (await primeira.json()).id;
+      await request("agendamentos/" + primeiraId + "/status", "PATCH", {
+        status: "CANCELADO",
+      });
+      expect((await consultar(quinta))[0]).toBe(quinta + "T12:00:00.000Z");
+      expect(await consultar("2030-01-13")).toEqual([]);
+      expect((await reservar(quinta + "T12:15:00Z")).status).toBe(400);
       expect(
         (
           await request("disponibilidades", "POST", {
@@ -84,7 +146,7 @@ it.skipIf(!process.env.TEST_DATABASE_URL)(
         (
           await request("agendamentos", "POST", {
             ...dto,
-            inicio: "2030-01-07T13:30:00Z",
+            inicio: "2030-01-07T13:00:00Z",
           })
         ).status,
       ).toBe(400);

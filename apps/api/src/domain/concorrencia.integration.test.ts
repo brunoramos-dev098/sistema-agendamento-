@@ -22,7 +22,7 @@ it.skipIf(!process.env.TEST_DATABASE_URL)(
         [p, "Teste", "1", p + "@test.local", "Teste"],
       );
       await pool.query(
-        'INSERT INTO "Servico" (id,nome,descricao,preco,duracao) VALUES ($1,$2,$3,10,60)',
+        'INSERT INTO "Servico" (id,nome,descricao,preco,duracao) VALUES ($1,$2,$3,10,30)',
         [s, "Teste", "Teste"],
       );
       const reservar = (id: string) =>
@@ -31,7 +31,7 @@ it.skipIf(!process.env.TEST_DATABASE_URL)(
           [
             id,
             "2030-01-07T13:00:00Z",
-            "2030-01-07T14:00:00Z",
+            "2030-01-07T13:30:00Z",
             "AGENDADO",
             c,
             p,

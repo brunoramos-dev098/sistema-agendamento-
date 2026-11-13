@@ -68,7 +68,7 @@ Pendências: validar imersão, permissões e transições com usuários; aprimor
 ## Equipe
 
 | Integrante              | GitHub                                                            | Papel     |
-| ----------------------- | ----------------------------------------------------------------- | --------- |
+| Luis Lopes              | .[luislopes765] https://github.com/luislopes765                   |     QA    |
 | Bruno Ramos             | [@brunoramos-dev098](https://github.com/brunoramos-dev098)        | Team Lead |
 | Luciano Henrique        | [lucianohoalmeida@gmail.com](https://github.com/lucianohenriquue) | Back-end  |
 | Thyago Baima            | [Thyago098](https://github.com/Thyago098)                         | DevOps    |
